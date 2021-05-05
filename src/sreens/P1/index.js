@@ -1,8 +1,18 @@
 import React, {useState} from 'react';
 import {Text, View, Alert, Pressable} from 'react-native';
 import RNLocation from 'react-native-location';
+import LottieView from 'lottie-react-native';
+import {useNavigation} from '@react-navigation/native';
 
 const P1 = () => {
+  const navigation = useNavigation();
+
+  const move = () => {
+    navigation.navigate('P2', {
+      lat,
+      lon,
+    });
+  };
   const [lat, setLat] = useState(0);
   const [lon, setLon] = useState(0);
 
@@ -35,12 +45,44 @@ const P1 = () => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <Pressable
-        style={{width: 100, height: 100, backgroundColor: '#000000'}}
-        onPress={gps}></Pressable>
-      <Text>{lat}</Text>
+      <LottieView
+        source={require('../../animations/52448-zero-anim-1.json')}
+        autoPlay={true}
+        loop
+        speed={4}
+        style={{
+          height: 300,
+          width: 100,
+          alignSelf: 'center',
+          marginTop: 50,
+        }}
+      />
+      <LottieView
+        source={require('../../animations/6607-loading-drop (1).json')}
+        autoPlay={true}
+        loop={false}
+        speed={0.5}
+        onAnimationFinish={move}
+        style={{
+          height: 1,
+          width: 1,
+          alignSelf: 'center',
+          marginTop: 50,
+        }}
+      />
 
-      <Text>{lon}</Text>
+      <LottieView
+        source={require('../../animations/6607-loading-drop (1).json')}
+        autoPlay={true}
+        loop={false}
+        onAnimationFinish={gps}
+        style={{
+          height: 1,
+          width: 1,
+          alignSelf: 'center',
+          marginTop: 50,
+        }}
+      />
     </View>
   );
 };

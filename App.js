@@ -1,7 +1,10 @@
 import React, {useEffect} from 'react';
+import 'react-native-gesture-handler';
+
 import {PermissionsAndroid, Platform} from 'react-native';
-import App from './src/sreens/P1/index';
 import Geolocation from '@react-native-community/geolocation';
+import P1 from './src/sreens/P1/index';
+import App from './src/Nav/index';
 
 const all = () => {
   const Permission = async () => {
