@@ -5,6 +5,9 @@ import {PermissionsAndroid, Platform} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import P1 from './src/sreens/P1/index';
 import App from './src/Nav/index';
+import Amplify from 'aws-amplify';
+import config from './aws-exports/aws-exports';
+Amplify.configure(config);
 
 const all = () => {
   const Permission = async () => {
