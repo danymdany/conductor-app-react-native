@@ -2,47 +2,55 @@ import React, {useEffect} from 'react';
 import 'react-native-gesture-handler';
 
 import {PermissionsAndroid, Platform} from 'react-native';
-import Geolocation from '@react-native-community/geolocation';
-import P1 from './src/sreens/P1/index';
 import App from './src/Nav/index';
-import Amplify from 'aws-amplify';
+import Amplify, {API, Auth, graphqlOperation} from 'aws-amplify';
 import config from './aws-exports/aws-exports';
+import {getCarId} from './src/graphql/query';
+import {withAuthenticator} from 'aws-amplify-react-native/dist/Auth';
+import {createCar} from './src/graphql/mutation';
 Amplify.configure(config);
 
 const all = () => {
-  const Permission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'Cool Photo App Camera Permission',
-          message:
-            'Cool Photo App needs access to your camera ' +
-            'so you can take awesome pictures.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      } else {
-        console.log('Camera permission denied');
-      }
-    } catch (err) {}
-  };
-
   useEffect(() => {
-    if (Platform.OS == 'android') {
-      Permission();
-    }
+    const updateUserCar = async () => {
+      /// get
+      const authUser = await Auth.currentAuthenticatedUser({bypassCache: true});
+      if (!authUser) {
+        return;
+      }
 
-    // IOS
-    else {
-      Geolocation.requestAuthorization;
-    }
+      /// chekt
+      const carData = await API.graphql(
+        graphqlOperation(getCarId, {
+          id: authUser.attributes.sub,
+        }),
+      );
+      console.log(authUser);
+
+      if (!!carData.data.getCarId) {
+        console.log('listo');
+        return;
+      }
+
+      /// if not create
+
+      const newCar = {
+        id: authUser.attributes.sub,
+        type: 'taxi',
+        userId: authUser.attributes.sub,
+      };
+
+      await API.graphql(
+        graphqlOperation(createCar, {
+          input: newCar,
+        }),
+      );
+    };
+
+    updateUserCar();
   }, []);
 
   return <App />;
 };
 
-export default all;
+export default withAuthenticator(all);

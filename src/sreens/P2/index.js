@@ -7,8 +7,10 @@ import styles from './styles';
 import Pop from '../popup/index';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MapViewDirections from 'react-native-maps-directions';
-import {withAuthenticator} from 'aws-amplify-react-native';
+import Amplify, {API, Auth, graphqlOperation} from 'aws-amplify';
+import {getCar, listOrders} from '../../graphql/query';
 
+/////////////////////////////////////////////////////////////////////////////
 const P2 = () => {
   const route = useRoute();
   const GOOGLE_MAPS_APIKEY = 'AIzaSyDC5YeK0OuXzBkkpcdYF71wTjtIGVV4NgE';
@@ -16,42 +18,62 @@ const P2 = () => {
   const [lon, setLon] = useState(route.params.lon);
   const [isOnline, setIsOnline] = useState(false);
   const [order, setOrder] = useState(null);
-  const [newOrders, setNewOrders] = useState({
-    id: '1',
-    type: 'stanley',
+  const [newOrders, setNewOrders] = useState([]);
 
-    user: {
-      rating: 0.5,
-      nombre: 'stanley',
-      distance: 5,
-    },
-  });
-
-  const onDecline = () => {
-    setNewOrders(null);
+  const fetchCar = async () => {
+    try {
+      const userData = await Auth.currentAuthenticatedUser();
+      const carData = await API.graphql(
+        graphqlOperation(getCar, {id: userData.attributes.sub}),
+      );
+    } catch (e) {
+      console.error(e);
+    }
   };
+
+  useEffect(() => {
+    fetchOrders();
+    fetchCar();
+  }, []);
+
+  /////////////////////////////////////////////////////////////////////////////
+  const onDecline = () => {
+    setNewOrders(newOrders.slice(1));
+  };
+
+  const fetchOrders = async () => {
+    try {
+      const orderData = await API.graphql(graphqlOperation(listOrders));
+      setNewOrders(orderData.data.listOrders.items);
+      console.log(orderData.data.listOrders.items);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  /////////////////////////////////////////////////////////////////////////////
 
   const onAccept = (newOrder) => {
     setOrder(newOrder);
-    setNewOrders(null);
+    setNewOrders(newOrders.slice(1));
   };
-
+  /////////////////////////////////////////////////////////////////////////////
   const online = () => {
     setIsOnline(!isOnline);
     console.log('oneline');
   };
-
+  /////////////////////////////////////////////////////////////////////////////
   const destination = {
     A: 12.146189045598227,
     B: -86.21295625560116,
   };
+  /////////////////////////////////////////////////////////////////////////////
 
   const orderAcept = () => {
     if (order) {
       return (
         <View style={styles.onlineorder}>
           <View style={[styles.info, {bottom: 80, left: 10}]}>
-            <Text style={styles.Text11}>{order.user.nombre}</Text>
+            <Text style={styles.Text11}></Text>
           </View>
           <Pressable
             style={[styles.info, {bottom: 30, left: 10}]}
@@ -59,14 +81,15 @@ const P2 = () => {
             <Text style={styles.Text11}>usar maps</Text>
           </Pressable>
           <View style={[styles.info, {bottom: 80, right: 10}]}>
-            <Text style={styles.Text11}>{order.distance} Km</Text>
+            <Text style={styles.Text11}> Km</Text>
           </View>
           <View style={[styles.info2, {bottom: 30, right: 10}]}>
-            <Text style={styles.Text11}>{order.duration} min</Text>
+            <Text style={styles.Text11}> {order.nota}</Text>
           </View>
         </View>
       );
     }
+    /////////////////////////////////////////////////////////////////////////////
 
     if (isOnline) {
       return (
@@ -82,13 +105,14 @@ const P2 = () => {
       );
     }
   };
+  /////////////////////////////////////////////////////////////////////////////
   const gps = (event) => {
     const lat = event.nativeEvent.coordinate.latitude;
     const lon = event.nativeEvent.coordinate.longitude;
     setLat(lat);
     setLon(lon);
   };
-
+  /////////////////////////////////////////////////////////////////////////////
   const info = (event) => {
     if (order)
       setOrder({
@@ -97,13 +121,14 @@ const P2 = () => {
         duration: event.duration,
       });
   };
-
+  /////////////////////////////////////////////////////////////////////////////
   const navigation = useNavigation();
   const move = () => {
     navigation.navigate('P3', {
       destination,
     });
   };
+  /////////////////////////////////////////////////////////////////////////////
 
   return (
     <SafeAreaView>
@@ -128,8 +153,8 @@ const P2 = () => {
               longitude: lon,
             }}
             destination={{
-              latitude: destination.A,
-              longitude: destination.B,
+              latitude: order.destLatitude,
+              longitude: order.destLongitude,
             }}
             apikey={GOOGLE_MAPS_APIKEY}
             onReady={info}
@@ -165,17 +190,17 @@ const P2 = () => {
 
       <Pressable style={[styles.online, {bottom: 0}]}>{orderAcept}</Pressable>
 
-      {newOrders && (
+      {newOrders.length > 0 && !order && (
         <Pop
-          newOrder={newOrders}
+          newOrder={newOrders[0]}
           duration={2}
           distance={0.5}
           onDecline={onDecline}
-          onAccept={() => onAccept(newOrders)}
+          onAccept={() => onAccept(newOrders[0])}
         />
       )}
     </SafeAreaView>
   );
 };
 
-export default withAuthenticator(P2);
+export default P2;

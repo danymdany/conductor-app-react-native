@@ -1,10 +1,51 @@
-import React, {useState} from 'react';
-import {Text, View, Alert, Pressable} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  Text,
+  View,
+  Alert,
+  Pressable,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
 import RNLocation from 'react-native-location';
 import LottieView from 'lottie-react-native';
 import {useNavigation} from '@react-navigation/native';
+import {withAuthenticator} from 'aws-amplify-react-native/dist/Auth';
+import Geolocation from '@react-native-community/geolocation';
 
 const P1 = () => {
+  const Permission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Cool Photo App Camera Permission',
+          message:
+            'Cool Photo App needs access to your camera ' +
+            'so you can take awesome pictures.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {}
+  };
+
+  useEffect(() => {
+    if (Platform.OS == 'android') {
+      Permission();
+    }
+
+    // IOS
+    else {
+      Geolocation.requestAuthorization;
+    }
+  }, []);
+
   const navigation = useNavigation();
 
   const move = () => {
