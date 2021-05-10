@@ -3,7 +3,13 @@ import {View, Text, Pressable} from 'react-native';
 import styles from './styles.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const NewOrderPopup = ({newOrder, onDecline, onAccept, duration, distance}) => {
+const NewOrderPopup = ({
+  newOrder,
+  onDecline,
+  onAccept,
+
+  nota,
+}) => {
   return (
     <View style={styles.root}>
       <Pressable style={styles.declineButton} onPress={onDecline}>
@@ -20,9 +26,10 @@ const NewOrderPopup = ({newOrder, onDecline, onAccept, duration, distance}) => {
             </Text>
           </View>
         </View>
+        <Text style={styles.nota}>km</Text>
+        <Text style={styles.nota}>min</Text>
 
-        <Text style={styles.minutes}>{duration} min</Text>
-        <Text style={styles.distance}>{distance}km</Text>
+        <Text style={styles.nota}>{newOrder.nota}</Text>
       </Pressable>
     </View>
   );

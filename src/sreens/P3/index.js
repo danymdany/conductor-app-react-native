@@ -8,14 +8,16 @@ import styles from './styles';
 const P3 = () => {
   const navigation = useNavigation();
   const route = useRoute();
-
+  console.log(route.params);
   console.log(route.params);
   const move = () => {
     navigation.navigate('P2');
   };
 
-  const lat = route.params.destination.A;
-  const lon = route.params.destination.B;
+  const lat = route.params.latitude;
+  const lon = route.params.longitude;
+
+  console.log(lat);
 
   const location = `${lat},${lon}`;
   const url = Platform.select({

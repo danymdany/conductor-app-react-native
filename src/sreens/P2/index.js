@@ -62,10 +62,7 @@ const P2 = () => {
     console.log('oneline');
   };
   /////////////////////////////////////////////////////////////////////////////
-  const destination = {
-    A: 12.146189045598227,
-    B: -86.21295625560116,
-  };
+
   /////////////////////////////////////////////////////////////////////////////
 
   const orderAcept = () => {
@@ -73,7 +70,7 @@ const P2 = () => {
       return (
         <View style={styles.onlineorder}>
           <View style={[styles.info, {bottom: 80, left: 10}]}>
-            <Text style={styles.Text11}></Text>
+            <Text style={styles.Text11}>{order.type}</Text>
           </View>
           <Pressable
             style={[styles.info, {bottom: 30, left: 10}]}
@@ -81,10 +78,10 @@ const P2 = () => {
             <Text style={styles.Text11}>usar maps</Text>
           </Pressable>
           <View style={[styles.info, {bottom: 80, right: 10}]}>
-            <Text style={styles.Text11}> Km</Text>
+            <Text style={styles.Text11}> {order.distance}Km</Text>
           </View>
           <View style={[styles.info2, {bottom: 30, right: 10}]}>
-            <Text style={styles.Text11}> {order.nota}</Text>
+            <Text style={styles.Text11}> {order.duration}min </Text>
           </View>
         </View>
       );
@@ -125,9 +122,11 @@ const P2 = () => {
   const navigation = useNavigation();
   const move = () => {
     navigation.navigate('P3', {
-      destination,
+      latitude: order.destLatitude,
+      longitude: order.destLongitude,
     });
   };
+
   /////////////////////////////////////////////////////////////////////////////
 
   return (
@@ -153,8 +152,8 @@ const P2 = () => {
               longitude: lon,
             }}
             destination={{
-              latitude: order.destLatitude,
-              longitude: order.destLongitude,
+              latitude: order.originLatitude,
+              longitude: order.originLongitude,
             }}
             apikey={GOOGLE_MAPS_APIKEY}
             onReady={info}
@@ -193,8 +192,6 @@ const P2 = () => {
       {newOrders.length > 0 && !order && (
         <Pop
           newOrder={newOrders[0]}
-          duration={2}
-          distance={0.5}
           onDecline={onDecline}
           onAccept={() => onAccept(newOrders[0])}
         />

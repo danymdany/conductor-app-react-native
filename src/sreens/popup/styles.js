@@ -30,6 +30,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginHorizontal: 10,
   },
+
+  nota: {
+    color: 'lightgrey',
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
