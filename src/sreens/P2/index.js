@@ -18,6 +18,8 @@ const P2 = () => {
   const [lon, setLon] = useState(route.params.lon);
   const [isOnline, setIsOnline] = useState(false);
   const [order, setOrder] = useState(null);
+
+  const [dist, setDist] = useState(null);
   const [newOrders, setNewOrders] = useState([]);
 
   const fetchCar = async () => {
@@ -158,7 +160,7 @@ const P2 = () => {
             apikey={GOOGLE_MAPS_APIKEY}
             onReady={info}
             strokeWidth={5}
-            strokeColor="#ffffff"
+            strokeColor="#400857"
           />
         )}
       </MapView>
@@ -170,7 +172,7 @@ const P2 = () => {
       </Pressable>
 
       <Pressable style={[styles.saldo, {top: 20, right: 10}]}>
-        <Text style={styles.text12}>125 C$</Text>
+        <Text style={styles.text12}>0 C$</Text>
       </Pressable>
       <Pressable
         style={[styles.online2, {bottom: 150, left: 10}]}
