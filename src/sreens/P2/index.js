@@ -45,7 +45,9 @@ const P2 = () => {
 
   const fetchOrders = async () => {
     try {
-      const orderData = await API.graphql(graphqlOperation(listOrders));
+      const orderData = await API.graphql(
+        graphqlOperation(listOrders, {filter: {status: {eq: 'NEW'}}}),
+      );
       setNewOrders(orderData.data.listOrders.items);
       console.log(orderData.data.listOrders.items);
     } catch (e) {
