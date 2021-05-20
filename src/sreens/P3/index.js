@@ -1,30 +1,25 @@
-import React, {useState} from 'react';
-import {Text, View, Alert, Pressable, Linking} from 'react-native';
-import RNLocation from 'react-native-location';
+// screen to go at  map app
+import React from 'react';
+import {View, Linking} from 'react-native';
 import LottieView from 'lottie-react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import styles from './styles';
+// require imports
 
 const P3 = () => {
-  const navigation = useNavigation();
   const route = useRoute();
-  console.log(route.params);
-  console.log(route.params);
-  const move = () => {
-    navigation.navigate('P2');
-  };
-
   const lat = route.params.latitude;
   const lon = route.params.longitude;
-
-  console.log(lat);
+  // info about latitude and longitude from the P2  to use  linking to open maps app
 
   const location = `${lat},${lon}`;
   const url = Platform.select({
     ios: `maps:${location}`,
     android: `geo:${location}?center=${location}&q=${location}&z=16`,
   });
+  // funcion to open the maps with the destination of the client
 
+  // return to do the linking funcion later the animation end
   return (
     <View style={styles.cont}>
       <LottieView

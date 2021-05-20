@@ -1,3 +1,5 @@
+// principal screen for all the  order logistic
+
 import React, {useState, useEffect} from 'react';
 import {Text, View, Pressable, SafeAreaView} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -7,10 +9,10 @@ import styles from './styles';
 import Pop from '../popup/index';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MapViewDirections from 'react-native-maps-directions';
-import Amplify, {API, Auth, graphqlOperation} from 'aws-amplify';
+import {API, Auth, graphqlOperation} from 'aws-amplify';
 import {getCar, listOrders} from '../../graphql/query';
+//  require imports
 
-/////////////////////////////////////////////////////////////////////////////
 const P2 = () => {
   const route = useRoute();
   const GOOGLE_MAPS_APIKEY = 'AIzaSyDC5YeK0OuXzBkkpcdYF71wTjtIGVV4NgE';
@@ -18,9 +20,8 @@ const P2 = () => {
   const [lon, setLon] = useState(route.params.lon);
   const [isOnline, setIsOnline] = useState(false);
   const [order, setOrder] = useState(null);
-
-  const [dist, setDist] = useState(null);
   const [newOrders, setNewOrders] = useState([]);
+  //  states
 
   const fetchCar = async () => {
     try {
@@ -38,7 +39,8 @@ const P2 = () => {
     fetchCar();
   }, []);
 
-  /////////////////////////////////////////////////////////////////////////////
+  //   get car
+
   const onDecline = () => {
     setNewOrders(newOrders.slice(1));
   };
@@ -49,25 +51,24 @@ const P2 = () => {
         graphqlOperation(listOrders, {filter: {status: {eq: 'NEW'}}}),
       );
       setNewOrders(orderData.data.listOrders.items);
-      console.log(orderData.data.listOrders.items);
     } catch (e) {
       console.error(e);
     }
   };
-  /////////////////////////////////////////////////////////////////////////////
+
+  // ondecline order
 
   const onAccept = (newOrder) => {
     setOrder(newOrder);
     setNewOrders(newOrders.slice(1));
   };
-  /////////////////////////////////////////////////////////////////////////////
+  // on accept order
   const online = () => {
     setIsOnline(!isOnline);
     console.log('oneline');
   };
-  /////////////////////////////////////////////////////////////////////////////
 
-  /////////////////////////////////////////////////////////////////////////////
+  // return for the driver interface if the order was accept
 
   const orderAcept = () => {
     if (order) {
@@ -90,30 +91,16 @@ const P2 = () => {
         </View>
       );
     }
-    /////////////////////////////////////////////////////////////////////////////
-
-    if (isOnline) {
-      return (
-        <View style={[styles.info, {bottom: 80, left: 10}]}>
-          <Text style={styles.Text11}>oneline</Text>
-        </View>
-      );
-    } else {
-      return (
-        <View style={[styles.info, {bottom: 80, left: 10}]}>
-          <Text style={styles.Text11}>ofline</Text>
-        </View>
-      );
-    }
   };
-  /////////////////////////////////////////////////////////////////////////////
+
+  // gps from google map  and set states
   const gps = (event) => {
     const lat = event.nativeEvent.coordinate.latitude;
     const lon = event.nativeEvent.coordinate.longitude;
     setLat(lat);
     setLon(lon);
   };
-  /////////////////////////////////////////////////////////////////////////////
+  // info from map   like latitude and longitude
   const info = (event) => {
     if (order)
       setOrder({
@@ -122,7 +109,8 @@ const P2 = () => {
         duration: event.duration,
       });
   };
-  /////////////////////////////////////////////////////////////////////////////
+
+  // navigation when the driver prress use maps option  to open in google maps
   const navigation = useNavigation();
   const move = () => {
     navigation.navigate('P3', {
@@ -131,7 +119,7 @@ const P2 = () => {
     });
   };
 
-  /////////////////////////////////////////////////////////////////////////////
+  // return for the principal interface UI for thedriver and logistic about order and  change of the UI when order is
 
   return (
     <SafeAreaView>

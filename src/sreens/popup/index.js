@@ -1,11 +1,29 @@
-import React from 'react';
-import {View, Text, Pressable} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Text,
+  RefreshControl,
+  ScrollView,
+  FlatList,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import styles from './styles.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {updateOrder} from '../../graphql/mutation';
 import {API, graphqlOperation, Auth} from 'aws-amplify';
 
 const NewOrderPopup = ({newOrder, onDecline, onAccept}) => {
+  const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   const order = async () => {
     try {
       const userInfo = await Auth.currentAuthenticatedUser();
@@ -29,35 +47,60 @@ const NewOrderPopup = ({newOrder, onDecline, onAccept}) => {
     }
   };
 
+  console.log(newOrder);
+
+  const DATA = [newOrder];
+  const Item = ({item, onPress, backgroundColor, textColor}) => (
+    <TouchableOpacity
+      onPress={onAccept}
+      onPressIn={order}
+      style={[styles.item, backgroundColor]}>
+      <Text style={[styles.title1, textColor]}>{item.type}</Text>
+      <Text style={[styles.title2, textColor]}>{item.duration}min</Text>
+      <Text style={[styles.title3, textColor]}>
+        {item.cost} {''}C$
+      </Text>
+      <Text style={[styles.title4, textColor]}>{item.distance}Km</Text>
+      <Text style={[styles.title2, textColor]}>
+        {' '}
+        B: {'  '}
+        {item.place}
+      </Text>
+
+      <Text style={[styles.title5]}>{item.status}</Text>
+    </TouchableOpacity>
+  );
+  const [selectedId, setSelectedId] = useState(null);
+
+  const renderItem = ({item}) => {
+    const backgroundColor = item.id === selectedId ? '#000000' : '#ffffff';
+    const color = item.id === selectedId ? 'white' : 'black';
+
+    return (
+      <Item
+        item={newOrder}
+        onPress={() => setSelectedId(item.id)}
+        backgroundColor={{backgroundColor}}
+        textColor={{color}}
+      />
+    );
+  };
+
   return (
-    <View style={styles.root}>
-      <Pressable style={styles.declineButton} onPress={onDecline}>
-        <Text style={styles.declineText}>Cancelar</Text>
-      </Pressable>
-
-      <Pressable style={styles.popupContainer}>
-        <View style={styles.row}>
-          <Text style={styles.uberType}>{newOrder.type}</Text>
-
-          <View style={styles.userBg}>
-            <Text>
-              <Icon name="user" size={25} color="#ffffff" />
-            </Text>
-          </View>
-        </View>
-
-        <Text style={styles.nota}>{newOrder.nota}</Text>
-        <Text style={styles.nota}>{newOrder.distance}Km</Text>
-        <Text style={styles.nota}>{newOrder.duration}min</Text>
-        <Text style={styles.nota}>{newOrder.cost}C$</Text>
-        <Pressable
-          style={styles.declineButton}
-          onPress={onAccept}
-          onPressIn={order}>
-          <Text style={styles.declineText}>aceptar</Text>
-        </Pressable>
-      </Pressable>
-    </View>
+    <SafeAreaView style={styles.root}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        <FlatList
+          data={DATA}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          extraData={selectedId}
+        />
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

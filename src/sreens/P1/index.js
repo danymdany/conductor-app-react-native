@@ -1,16 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Text,
-  View,
-  Alert,
-  Pressable,
-  PermissionsAndroid,
-  Platform,
-} from 'react-native';
+import {View, PermissionsAndroid, Platform} from 'react-native';
 import RNLocation from 'react-native-location';
 import LottieView from 'lottie-react-native';
 import {useNavigation} from '@react-navigation/native';
-import {withAuthenticator} from 'aws-amplify-react-native/dist/Auth';
 import Geolocation from '@react-native-community/geolocation';
 
 const P1 = () => {
@@ -19,12 +11,8 @@ const P1 = () => {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
-          title: 'Cool Photo App Camera Permission',
-          message:
-            'Cool Photo App needs access to your camera ' +
-            'so you can take awesome pictures.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
+          title: 'aceptar acceso al gps ',
+
           buttonPositive: 'OK',
         },
       );

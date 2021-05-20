@@ -62,6 +62,7 @@ export const listOrders = /* GraphQL */ `
         duration
         distance
         cost
+        place
         destLatitude
         destLongitude
         nota

@@ -55,6 +55,33 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
   },
+
+  scrollView: {},
+  item: {
+    padding: 10,
+    marginVertical: 8,
+    marginHorizontal: 10,
+    borderRadius: 10,
+  },
+  title1: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  title2: {
+    fontSize: 15,
+  },
+  title3: {
+    fontSize: 15,
+  },
+  title4: {
+    fontSize: 15,
+  },
+
+  title5: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#18C800',
+  },
 });
 
 export default styles;
