@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import MapViewDirections from 'react-native-maps-directions';
 import {API, Auth, graphqlOperation} from 'aws-amplify';
 import {getCar, listOrders} from '../../graphql/query';
+import {onCreateOrder, onUpdateOrder} from '../../graphql/real-time-order';
 //  require imports
 
 const P2 = () => {
@@ -67,6 +68,26 @@ const P2 = () => {
     setIsOnline(!isOnline);
     console.log('oneline');
   };
+
+  // real time UI update
+
+  useEffect(() => {
+    const realTime = API.graphql(graphqlOperation(onCreateOrder)).subscribe({
+      next: (data) => {
+        const UIupdate = data.value.data.onCreateOrder;
+        setNewOrders([UIupdate, ...newOrders]);
+      },
+    });
+  }, []);
+
+  /* useEffect(() => {
+    const status = API.graphql(graphqlOperation(onUpdateOrder)).subscribe({
+      next: (data) => {
+        const UI = data.value.data.onUpdateOrder;
+        setNewOrders([UI, ...newOrders]);
+      },
+    });
+  }, []); */
 
   // return for the driver interface if the order was accept
 

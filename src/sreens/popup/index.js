@@ -8,26 +8,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import styles from './styles.js';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {updateOrder} from '../../graphql/mutation';
 import {API, graphqlOperation, Auth} from 'aws-amplify';
 
 const NewOrderPopup = ({newOrder, onDecline, onAccept}) => {
-  const wait = (timeout) => {
-    return new Promise((resolve) => setTimeout(resolve, timeout));
-  };
-
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
-
   const order = async () => {
     try {
       const userInfo = await Auth.currentAuthenticatedUser();
-      console.log(userInfo.username);
 
       const date = new Date();
 
@@ -47,8 +34,6 @@ const NewOrderPopup = ({newOrder, onDecline, onAccept}) => {
     }
   };
 
-  console.log(newOrder);
-
   const DATA = [newOrder];
   const Item = ({item, onPress, backgroundColor, textColor}) => (
     <TouchableOpacity
@@ -61,9 +46,11 @@ const NewOrderPopup = ({newOrder, onDecline, onAccept}) => {
         {item.cost} {''}C$
       </Text>
       <Text style={[styles.title4, textColor]}>{item.distance}Km</Text>
+      <Text style={[styles.title4, textColor]}>{item.nota}</Text>
+
       <Text style={[styles.title2, textColor]}>
         {' '}
-        B: {'  '}
+        {'  '}
         {item.place}
       </Text>
 
@@ -88,18 +75,12 @@ const NewOrderPopup = ({newOrder, onDecline, onAccept}) => {
 
   return (
     <SafeAreaView style={styles.root}>
-      <ScrollView
-        contentContainerStyle={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
-        <FlatList
-          data={DATA}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          extraData={selectedId}
-        />
-      </ScrollView>
+      <FlatList
+        data={DATA}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        extraData={selectedId}
+      />
     </SafeAreaView>
   );
 };
