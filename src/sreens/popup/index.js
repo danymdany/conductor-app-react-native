@@ -10,8 +10,45 @@ import {
 import styles from './styles.js';
 import {updateOrder} from '../../graphql/mutation';
 import {API, graphqlOperation, Auth} from 'aws-amplify';
+import {createCarInfo} from '../../graphql/mutation';
 
-const NewOrderPopup = ({newOrder, onDecline, onAccept}) => {
+const NewOrderPopup = ({newOrder, onDecline, onAccept, location}) => {
+  const carInfo = async () => {
+    try {
+      const userInfo = await Auth.currentAuthenticatedUser();
+      console.log(userInfo.username);
+
+      const date = new Date();
+
+      const input = {
+        createdAt: date.toISOString(),
+        type: newOrder.type,
+        originLatitude: location.lat,
+        originLongitude: location.lon,
+        distance: 1,
+        duration: 1,
+        cost: 1,
+        place: 'place',
+        status: 'NEW',
+        destLatitude: 0,
+
+        destLongitude: 0,
+
+        nota: 'test',
+        userId: 9,
+        carId: '1',
+      };
+      const response = await API.graphql(
+        graphqlOperation(createCarInfo, {
+          input,
+        }),
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const order = async () => {
     try {
       const userInfo = await Auth.currentAuthenticatedUser();
@@ -34,10 +71,15 @@ const NewOrderPopup = ({newOrder, onDecline, onAccept}) => {
     }
   };
 
+  const presout = () => {
+    console.log('pressss out');
+  };
+
   const DATA = [newOrder];
   const Item = ({item, onPress, backgroundColor, textColor}) => (
     <TouchableOpacity
-      onPress={onAccept}
+      onPressOut={onAccept}
+      onPress={carInfo}
       onPressIn={order}
       style={[styles.item, backgroundColor]}>
       <Text style={[styles.title1, textColor]}>{item.type}</Text>

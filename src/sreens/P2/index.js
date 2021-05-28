@@ -91,6 +91,11 @@ const P2 = () => {
 
   // return for the driver interface if the order was accept
 
+  const location = {
+    lat: lat,
+    lon: lon,
+  };
+
   const orderAcept = () => {
     if (order) {
       return (
@@ -207,6 +212,7 @@ const P2 = () => {
           newOrder={newOrders[0]}
           onDecline={onDecline}
           onAccept={() => onAccept(newOrders[0])}
+          location={location}
         />
       )}
     </SafeAreaView>
