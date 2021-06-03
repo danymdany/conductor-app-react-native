@@ -24,15 +24,28 @@ const styles = StyleSheet.create({
   },
   online: {
     position: 'absolute',
-    backgroundColor: '#171717',
+    backgroundColor: '#132c33',
     width: '100%',
-    height: 45,
+    height: 60,
      justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
     flexDirection:"row", 
      borderTopLeftRadius:10, 
      borderTopRightRadius:10
+     
+  },
+  top: {
+    position: 'absolute',
+    backgroundColor: '#132c33',
+    width: '100%',
+    height: 50,
+     justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    flexDirection:"row", 
+     borderBottomLeftRadius:5, 
+     borderBottomRightRadius:5
      
   },
 
@@ -118,7 +131,7 @@ const styles = StyleSheet.create({
   },
 
   text12: {
-    color: '#222222',
+    color: '#171717',
     fontWeight: 'bold',
     fontSize: 20
   },

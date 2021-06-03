@@ -1,40 +1,23 @@
-import React, {useState, useEffect} from 'react';
-import {View, PermissionsAndroid, Platform} from 'react-native';
-import RNLocation from 'react-native-location';
+import React, {useState} from 'react';
+import {View, Image} from 'react-native';
 import LottieView from 'lottie-react-native';
 import {useNavigation} from '@react-navigation/native';
-import Geolocation from '@react-native-community/geolocation';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import styles from './styles';
 
 const P1 = () => {
-  const Permission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'aceptar acceso al gps ',
+  const [lat, setLat] = useState(0);
+  const [lon, setLon] = useState(0);
+  const navigation = useNavigation();
 
-          buttonPositive: 'OK',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      } else {
-        console.log('Camera permission denied');
-      }
-    } catch (err) {}
+  
+  const gps = (event) => {
+    const lat = event.nativeEvent.coordinate.latitude;
+    const lon = event.nativeEvent.coordinate.longitude;
+    setLat(lat);
+    setLon(lon);
   };
 
-  useEffect(() => {
-    if (Platform.OS == 'android') {
-      Permission();
-    }
-
-    // IOS
-    else {
-      Geolocation.requestAuthorization;
-    }
-  }, []);
-
-  const navigation = useNavigation();
 
   const move = () => {
     navigation.navigate('P2', {
@@ -42,56 +25,33 @@ const P1 = () => {
       lon,
     });
   };
-  const [lat, setLat] = useState(0);
-  const [lon, setLon] = useState(0);
 
-  const gps = () => {
-    RNLocation.configure({
-      distanceFilter: 5.0,
-    });
-
-    RNLocation.requestPermission({
-      ios: 'whenInUse',
-      android: {
-        detail: 'coarse',
-      },
-    }).then((granted) => {
-      if (granted) {
-        const all = RNLocation.subscribeToLocationUpdates((locations) => {
-          let lat = locations[0].latitude;
-          let lon = locations[0].longitude;
-          setLat(lat);
-          setLon(lon);
-        });
-      }
-    });
-  };
-
-  return (
+  console.log(lat,lon)
+   return (
     <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
+      style={styles.view}>
+          <MapView
+        style={{height:1, width: 1 , top:1, left:1}}
+        provider={PROVIDER_GOOGLE}
+        onUserLocationChange={gps}
+         showsMyLocationButton={false}
+        showsUserLocation={true}
+        showsCompass={false}
+        initialRegion={{
+          latitude: 0 ,
+          longitude: 0,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}>
+       
+      </MapView>
+      <Image style={styles.img} source={require('../../animations/logo.png')} />
+
       <LottieView
-        source={require('../../animations/52448-zero-anim-1.json')}
-        autoPlay={true}
-        loop
-        speed={4}
-        style={{
-          height: 300,
-          width: 100,
-          alignSelf: 'center',
-          marginTop: 50,
-        }}
-      />
-      <LottieView
-        source={require('../../animations/6607-loading-drop (1).json')}
+        source={require('../../animations/1.json')}
         autoPlay={true}
         loop={false}
-        speed={0.5}
-        onAnimationFinish={move}
+         onAnimationFinish={move}
         style={{
           height: 1,
           width: 1,
@@ -100,18 +60,7 @@ const P1 = () => {
         }}
       />
 
-      <LottieView
-        source={require('../../animations/6607-loading-drop (1).json')}
-        autoPlay={true}
-        loop={false}
-        onAnimationFinish={gps}
-        style={{
-          height: 1,
-          width: 1,
-          alignSelf: 'center',
-          marginTop: 50,
-        }}
-      />
+     
     </View>
   );
 };

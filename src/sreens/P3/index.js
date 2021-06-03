@@ -1,40 +1,97 @@
 // screen to go at  map app
-import React from 'react';
-import {View, Linking} from 'react-native';
-import LottieView from 'lottie-react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import React , {useEffect, useState} from 'react';
+import {View,   SafeAreaView, ScrollView, Text,   SectionList,  FlatList
+} from 'react-native';
+ import {useNavigation, useRoute} from '@react-navigation/native';
+ import {API, Auth, graphqlOperation} from 'aws-amplify';
+
 import styles from './styles';
+import Br from '../bottomBr/bottomBar'
+import Tr from '../bottomBr/topBar'
+import {listOrders} from '../../graphql/query'
+import {onCreateOrder} from '../../graphql/real-time-order'
 // require imports
 
-const P3 = () => {
-  const route = useRoute();
-  const lat = route.params.latitude;
-  const lon = route.params.longitude;
-  // info about latitude and longitude from the P2  to use  linking to open maps app
+const P3 = () => { 
 
-  const location = `${lat},${lon}`;
-  const url = Platform.select({
-    ios: `maps:${location}`,
-    android: `geo:${location}?center=${location}&q=${location}&z=16`,
-  });
-  // funcion to open the maps with the destination of the client
+  const [newOrders, setNewOrders] = useState([]);
+ 
+   
+  useEffect(() => {
+    fetchOrders();
+   }, []);
 
-  // return to do the linking funcion later the animation end
-  return (
-    <View style={styles.cont}>
-      <LottieView
-        source={require('../../animations/52448-zero-anim-1.json')}
-        autoPlay={true}
-        loop={false}
-        onAnimationFinish={() => Linking.openURL(url)}
-        speed={5}
-        style={{
-          height: 300,
-          width: 100,
-          alignSelf: 'center',
-        }}
-      />
+  const fetchOrders = async () => {
+    try {
+      const orderData = await API.graphql(
+        graphqlOperation(listOrders, {filter: {status: {eq: 'NEW'}}}),
+      );
+      setNewOrders(orderData.data.listOrders.items);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    const realTime = API.graphql(graphqlOperation(onCreateOrder)).subscribe({
+      next: (data) => {
+        const UIupdate = data.value.data.onCreateOrder;
+        setNewOrders([UIupdate, ...newOrders]);
+      },
+    });
+  }, []);
+ 
+ 
+console.log(newOrders)
+
+const Item = ({title, price, place, distance, duration, final, status}) => (
+  <View style={styles.item}>
+    <View style={styles.item2}>
+    <Text style={styles.title}>nota :{title}</Text>
+    <Text style={styles.title}>{price}C$</Text>
+    <Text style={styles.title}>{distance}km</Text>
+    <Text style={styles.title}>{duration}min</Text>
+    <Text style={styles.title}>{place}</Text>
+    <Text style={styles.title2}>{status}</Text>
     </View>
+  </View>
+);
+const renderItem = ({item}) => (
+  <Item
+    title={item.nota}
+    price={item.cost}
+    place={item.place}
+    duration={item.duration}
+    distance={item.distance}
+    status={item.status}
+
+  />
+);
+
+  return (
+  
+      <SafeAreaView>
+        <View style={{width:"100%", height:"100%", backgroundColor:"#d8e3e7"}}>
+        <Tr/>
+       
+ 
+<View  style={{marginTop:50}}>
+<FlatList
+        data={newOrders}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+      />
+</View>
+        
+
+
+
+
+</View>
+
+<Br/>
+      </SafeAreaView>
+     
   );
 };
 
