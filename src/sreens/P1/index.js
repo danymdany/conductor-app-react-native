@@ -10,14 +10,12 @@ const P1 = () => {
   const [lon, setLon] = useState(0);
   const navigation = useNavigation();
 
-  
   const gps = (event) => {
     const lat = event.nativeEvent.coordinate.latitude;
     const lon = event.nativeEvent.coordinate.longitude;
     setLat(lat);
     setLon(lon);
   };
-
 
   const move = () => {
     navigation.navigate('P2', {
@@ -26,32 +24,29 @@ const P1 = () => {
     });
   };
 
-  console.log(lat,lon)
-   return (
-    <View
-      style={styles.view}>
-          <MapView
-        style={{height:1, width: 1 , top:1, left:1}}
+  console.log(lat, lon);
+  return (
+    <View style={styles.view}>
+      <MapView
+        style={{height: 1, width: 1, top: 1, left: 1}}
         provider={PROVIDER_GOOGLE}
         onUserLocationChange={gps}
-         showsMyLocationButton={false}
+        showsMyLocationButton={false}
         showsUserLocation={true}
         showsCompass={false}
         initialRegion={{
-          latitude: 0 ,
+          latitude: 0,
           longitude: 0,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
-        }}>
-       
-      </MapView>
+        }}></MapView>
       <Image style={styles.img} source={require('../../animations/logo.png')} />
 
       <LottieView
         source={require('../../animations/1.json')}
         autoPlay={true}
         loop={false}
-         onAnimationFinish={move}
+        onAnimationFinish={move}
         style={{
           height: 1,
           width: 1,
@@ -59,8 +54,6 @@ const P1 = () => {
           marginTop: 50,
         }}
       />
-
-     
     </View>
   );
 };
