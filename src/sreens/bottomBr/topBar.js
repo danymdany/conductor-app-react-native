@@ -5,10 +5,19 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 const Tr = () => {
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView>
       <Pressable style={[styles.top, {top: 0}]}>
-        <View style={{left: 10, top: 10}}>
+        <Pressable
+          style={{alignSelf: 'center', marginLeft: 10, marginRight: 20}}
+          onPress={() => navigation.navigate('P2')}>
+          <Text>
+            <Icon name="angle-left" size={35} color="#000000" />
+          </Text>
+        </Pressable>
+        <View style={{alignSelf: 'center'}}>
           <Text style={styles.texto}>órdenes</Text>
         </View>
       </Pressable>

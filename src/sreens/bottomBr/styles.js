@@ -17,22 +17,20 @@ const styles = StyleSheet.create({
   },
   saldo2: {
     width: 40,
-    height: 30,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 50,
+    backgroundColor: '#ffffff',
+    borderRadius: 100,
+    top: 0,
+    marginTop: 50,
   },
   online: {
     position: 'absolute',
-    backgroundColor: '#171717',
-    width: '100%',
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
+
+    width: 50,
+    height: 300,
     alignSelf: 'center',
-    flexDirection: 'row',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
   },
   top: {
     position: 'absolute',
@@ -43,6 +41,8 @@ const styles = StyleSheet.create({
 
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
   onlineorder: {
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   texto: {
-    color: '#171717',
+    color: '#152939',
     fontWeight: 'bold',
     fontSize: 30,
     textAlign: 'left',

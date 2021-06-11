@@ -9,31 +9,40 @@ const styles = StyleSheet.create({
 
   saldo: {
     position: 'absolute',
-     borderRadius: 10,
+    borderRadius: 10,
     width: 100,
     height: 30,
     justifyContent: 'center',
     alignItems: 'center',
   },
   saldo2: {
-      width: 40,
-    height: 30,
+    width: 40,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    margin:50
+    backgroundColor: '#ffffff',
+    borderRadius: 100,
+    top: 0,
+    marginTop: 50,
   },
   online: {
     position: 'absolute',
-    backgroundColor: '#171717',
-    width: '100%',
-    height: 45,
-     justifyContent: 'center',
-    alignItems: 'center',
+
+    width: 50,
+    height: 300,
     alignSelf: 'center',
-    flexDirection:"row", 
-     borderTopLeftRadius:10, 
-     borderTopRightRadius:10
-     
+  },
+  top: {
+    position: 'absolute',
+    width: '100%',
+    height: 50,
+
+    alignSelf: 'center',
+
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
   onlineorder: {
@@ -118,9 +127,15 @@ const styles = StyleSheet.create({
   },
 
   text12: {
-    color: '#222222',
+    color: '#171717',
     fontWeight: 'bold',
-    fontSize: 20
+    fontSize: 20,
+  },
+  texto: {
+    color: '#152939',
+    fontWeight: 'bold',
+    fontSize: 30,
+    textAlign: 'left',
   },
 });
 

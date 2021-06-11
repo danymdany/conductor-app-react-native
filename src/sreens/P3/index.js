@@ -7,6 +7,7 @@ import {
   Text,
   SectionList,
   FlatList,
+  Pressable,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {API, Auth, graphqlOperation} from 'aws-amplify';
@@ -21,6 +22,8 @@ import {onCreateOrder, onUpdateOrder} from '../../graphql/real-time-order';
 
 const P3 = () => {
   const [newOrders, setNewOrders] = useState([]);
+  const navigation = useNavigation();
+  const route = useRoute();
 
   useEffect(() => {
     fetchOrders();
@@ -54,43 +57,41 @@ const P3 = () => {
   }, []);
 
   const renderItem = ({item}) => (
-    <Item
-      title={item.nota}
-      price={item.cost}
-      place={item.place}
-      duration={item.duration}
-      distance={item.distance}
-      name={item.type}
-      status={item.status}
-    />
-  );
-
-  const Item = ({title, price, place, name}) => (
-    <View style={styles.item}>
+    <Pressable
+      style={styles.item}
+      onPress={() =>
+        navigation.navigate('P4', {
+          origenA: item.originLatitude,
+          origenB: item.originLongitude,
+          destinoA: item.destLatitude,
+          destinoB: item.destLongitude,
+          cost: item.cost,
+          name: item.type,
+          nota: item.nota,
+          lat: route.params.lat,
+          lon: route.params.lon,
+          place: item.place,
+        })
+      }>
       <View style={styles.item2}>
-        <Text style={styles.infoPlace}>{place}</Text>
+        <Text style={styles.infoPlace}>{item.place}</Text>
       </View>
 
       <View style={styles.item3}>
-        <Text style={styles.title}>{name}</Text>
+        <Text style={styles.title}>{item.type}</Text>
       </View>
       <View style={styles.item4}>
-        <Text style={styles.title}>{price} NIO </Text>
+        <Text style={styles.title}>{item.cost} NIO </Text>
       </View>
-      <View style={styles.item5}>
-        <Text style={styles.title}>
-          <Icon name="eye" size={18} color="#ffffff" />
-        </Text>
-      </View>
-    </View>
+    </Pressable>
   );
 
   return (
     <SafeAreaView>
-      <View style={{width: '100%', height: '100%', backgroundColor: '#d8e3e7'}}>
+      <View style={{width: '100%', height: '100%'}}>
         <Tr />
 
-        <View style={{marginTop: 50}}>
+        <View style={{marginTop: 50, marginBottom: 0}}>
           <FlatList
             data={newOrders}
             renderItem={renderItem}
@@ -98,8 +99,6 @@ const P3 = () => {
           />
         </View>
       </View>
-
-      <Br />
     </SafeAreaView>
   );
 };

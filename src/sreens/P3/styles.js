@@ -2,12 +2,11 @@ import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   item: {
-    backgroundColor: '#171717',
-    borderRadius: 5,
-    width: 400,
-    height: 100,
-    alignSelf: 'center',
-    margin: 10,
+    backgroundColor: '#fff',
+    padding: 50,
+    marginVertical: 5,
+    marginHorizontal: 5,
+    borderRadius: 10,
   },
   item2: {
     width: 300,
@@ -49,11 +48,11 @@ const styles = StyleSheet.create({
     right: 0,
   },
   title: {
-    color: '#ffffff',
+    color: '#152939',
     fontWeight: 'bold',
   },
   infoPlace: {
-    color: '#ffffff',
+    color: '#171717',
   },
 });
 
