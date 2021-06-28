@@ -3,10 +3,11 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   item: {
     backgroundColor: '#fff',
-    padding: 50,
-    marginVertical: 5,
-    marginHorizontal: 5,
-    borderRadius: 10,
+    padding: 47,
+    marginVertical: 0,
+    marginHorizontal: 2,
+    borderBottomColor: '#C8C8C8',
+    borderBottomWidth: 0.5,
   },
   item2: {
     width: 300,
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
     left: 0,
   },
   item4: {
-    width: 73,
+    width: 68,
     height: 30,
 
     margin: 10,
@@ -50,9 +51,15 @@ const styles = StyleSheet.create({
   title: {
     color: '#152939',
     fontWeight: 'bold',
+    fontSize: 12.5,
+  },
+  name: {
+    color: '#152939',
+    fontWeight: 'bold',
   },
   infoPlace: {
-    color: '#171717',
+    color: '#000000',
+    fontSize: 12.5,
   },
 });
 

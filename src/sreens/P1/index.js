@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Image} from 'react-native';
+import {View, Image, ImageBackground} from 'react-native';
 import LottieView from 'lottie-react-native';
 import {useNavigation} from '@react-navigation/native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -18,7 +18,7 @@ const P1 = () => {
   };
 
   const move = () => {
-    navigation.navigate('P2', {
+    navigation.navigate('P3', {
       lat,
       lon,
     });
@@ -26,35 +26,42 @@ const P1 = () => {
 
   console.log(lat, lon);
   return (
-    <View style={styles.view}>
-      <MapView
-        style={{height: 1, width: 1, top: 1, left: 1}}
-        provider={PROVIDER_GOOGLE}
-        onUserLocationChange={gps}
-        showsMyLocationButton={false}
-        showsUserLocation={true}
-        showsCompass={false}
-        initialRegion={{
-          latitude: 0,
-          longitude: 0,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}></MapView>
-      <Image style={styles.img} source={require('../../animations/logo.png')} />
+    <ImageBackground
+      source={require('../../animations/bg.jpg')}
+      style={styles.image}>
+      <View style={styles.view}>
+        <MapView
+          style={{height: 1, width: 1, top: 1, left: 1}}
+          provider={PROVIDER_GOOGLE}
+          onUserLocationChange={gps}
+          showsMyLocationButton={false}
+          showsUserLocation={true}
+          showsCompass={false}
+          initialRegion={{
+            latitude: 0,
+            longitude: 0,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}></MapView>
+        <Image
+          style={styles.img}
+          source={require('../../animations/logo.png')}
+        />
 
-      <LottieView
-        source={require('../../animations/1.json')}
-        autoPlay={true}
-        loop={false}
-        onAnimationFinish={move}
-        style={{
-          height: 1,
-          width: 1,
-          alignSelf: 'center',
-          marginTop: 50,
-        }}
-      />
-    </View>
+        <LottieView
+          source={require('../../animations/1.json')}
+          autoPlay={true}
+          loop={false}
+          onAnimationFinish={move}
+          style={{
+            height: 1,
+            width: 1,
+            alignSelf: 'center',
+            marginTop: 50,
+          }}
+        />
+      </View>
+    </ImageBackground>
   );
 };
 

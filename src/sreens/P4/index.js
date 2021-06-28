@@ -4,12 +4,49 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {createCarInfo} from '../../graphql/mutation';
+import {API, graphqlOperation, Auth} from 'aws-amplify';
 
 import styles from './styles';
 
 const P4 = () => {
   const route = useRoute();
   const navigation = useNavigation();
+
+  const order = async () => {
+    try {
+      const userInfo = await Auth.currentAuthenticatedUser();
+      console.log(userInfo.username);
+
+      const date = new Date();
+
+      const input = {
+        createdAt: date.toISOString(),
+        type: userInfo.username,
+        originLatitude: 0,
+        originLongitude: 0,
+        distance: 1,
+        duration: 1,
+        cost: 1,
+        place: 1,
+        status: 'NEW',
+        destLatitude: 1,
+        destLongitude: 1,
+        nota: 'lllll',
+        userId: 'stanly',
+        carId: '1',
+      };
+
+      const response = await API.graphql(
+        graphqlOperation(createCarInfo, {
+          input,
+        }),
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const GOOGLE_MAPS_APIKEY = 'AIzaSyDC5YeK0OuXzBkkpcdYF71wTjtIGVV4NgE';
   const origins = {
@@ -103,9 +140,9 @@ const P4 = () => {
         </View>
       </Pressable>
 
-      <Pressable style={styles.acept}>
-        <Text>
-          <Icon name="check" size={17} color="#ffffff" />
+      <Pressable onPress={order} style={styles.acept}>
+        <Text style={{color: '#ffffff'}}>
+          <Icon name="check" size={17} color="#ffffff" /> aceptar orden
         </Text>
       </Pressable>
     </SafeAreaView>

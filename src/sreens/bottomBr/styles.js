@@ -35,14 +35,15 @@ const styles = StyleSheet.create({
   top: {
     position: 'absolute',
     width: '100%',
-    height: 50,
+    height: 70,
 
     alignSelf: 'center',
 
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
     flexDirection: 'row',
     alignItems: 'center',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    backgroundColor: '#ffffff',
   },
 
   onlineorder: {
@@ -134,8 +135,30 @@ const styles = StyleSheet.create({
   texto: {
     color: '#152939',
     fontWeight: 'bold',
-    fontSize: 30,
+    fontSize: 15,
     textAlign: 'left',
+  },
+
+  logo: {
+    width: 65,
+    height: 65,
+    borderRadius: 100,
+  },
+
+  imgs: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    margin: 5,
+  },
+
+  pres: {
+    width: 40,
+    height: 40,
+    borderRadius: 100,
+    marginLeft: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

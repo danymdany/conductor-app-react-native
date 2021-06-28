@@ -1,10 +1,7 @@
-import { StyleSheet} from 'react-native'
+import {StyleSheet} from 'react-native';
 
-
-const styles = StyleSheet.create ({
-
-
-view:{
+const styles = StyleSheet.create({
+  view: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -14,8 +11,13 @@ view:{
     height: 200,
     alignSelf: 'center',
 
-    top: 50,
+    top: 40,
   },
-})
+  image: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
+});
 
-export default styles 
+export default styles;

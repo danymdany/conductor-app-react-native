@@ -80,17 +80,18 @@ const styles = StyleSheet.create({
   },
 
   acept: {
-    width: 40,
-    height: 40,
+    width: 150,
+    height: 35,
     backgroundColor: '#171717',
     position: 'absolute',
 
     bottom: 200,
     right: 10,
-    borderRadius: 100,
+    borderRadius: 10,
 
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
   },
 });
 export default styles;
