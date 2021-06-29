@@ -1,40 +1,78 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, Pressable, SafeAreaView} from 'react-native';
+import {
+  Text,
+  View,
+  Pressable,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {createCarInfo} from '../../graphql/mutation';
+import {createCarInfo, updateOrder} from '../../graphql/mutation';
 import {API, graphqlOperation, Auth} from 'aws-amplify';
 
 import styles from './styles';
 
 const P4 = () => {
+  const [lat, setLat] = useState(0);
+  const [lon, setLon] = useState(0);
+
+  const [user, setUser] = useState('');
+  console.log(user);
+
+  const loc = (event) => {
+    const lat = event.nativeEvent.coordinate.latitude;
+    const lon = event.nativeEvent.coordinate.longitude;
+    setLat(lat);
+    setLon(lon);
+  };
+  const End = async () => {
+    try {
+      const input = {
+        id: route.params.id,
+        status: 'updated',
+      };
+
+      const response = await API.graphql(
+        graphqlOperation(updateOrder, {
+          input,
+        }),
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  console.log(lat, lon);
+
   const route = useRoute();
   const navigation = useNavigation();
 
   const order = async () => {
     try {
       const userInfo = await Auth.currentAuthenticatedUser();
-      console.log(userInfo.username);
+      setUser(userInfo.username);
 
       const date = new Date();
 
       const input = {
         createdAt: date.toISOString(),
         type: userInfo.username,
-        originLatitude: 0,
-        originLongitude: 0,
+        originLatitude: lat,
+        originLongitude: lon,
         distance: 1,
         duration: 1,
         cost: 1,
-        place: 1,
+        place: '',
         status: 'NEW',
-        destLatitude: 1,
-        destLongitude: 1,
-        nota: 'lllll',
-        userId: 'stanly',
-        carId: '1',
+        destLatitude: lat,
+        destLongitude: lon,
+        nota: '',
+        userId: route.params.name,
+        carId: userInfo.username,
       };
 
       const response = await API.graphql(
@@ -86,6 +124,7 @@ const P4 = () => {
         style={{height: '100%', width: '100%'}}
         provider={PROVIDER_GOOGLE}
         showsMyLocationButton={false}
+        onUserLocationChange={loc}
         showsUserLocation={true}
         showsCompass={false}
         initialRegion={{
@@ -118,12 +157,6 @@ const P4 = () => {
         />
       </MapView>
 
-      <Pressable style={styles.back} onPress={() => navigation.navigate('P3')}>
-        <Text>
-          <Icon name="angle-left" size={30} color="#000000" />
-        </Text>
-      </Pressable>
-
       <Pressable style={styles.View}>
         <View style={styles.item2}>
           <Text>{route.params.place}</Text>
@@ -132,17 +165,36 @@ const P4 = () => {
         <View style={styles.item3}>
           <Text style={styles.title}>{route.params.name}</Text>
         </View>
-        <View style={styles.item4}>
-          <Text style={styles.title}>{route.params.cost} NIO </Text>
-        </View>
+        <View style={styles.item4}></View>
         <View style={styles.item22}>
           <Text style={styles.title}>{route.params.nota}</Text>
         </View>
       </Pressable>
 
-      <Pressable onPress={order} style={styles.acept}>
+      <TouchableOpacity onPress={order} style={styles.acept}>
         <Text style={{color: '#ffffff'}}>
-          <Icon name="check" size={17} color="#ffffff" /> aceptar orden
+          <Icon name="check" size={17} color="#ffffff" />
+        </Text>
+      </TouchableOpacity>
+      <Pressable style={styles.start}>
+        <Text style={{color: '#ffffff'}}>
+          <Icon name="check" size={17} color="#ffffff" />
+        </Text>
+      </Pressable>
+      <Pressable onPress={End} style={styles.end}>
+        <Text style={{color: '#ffffff'}}>
+          <Icon name="close" size={17} color="#ffffff" />
+        </Text>
+      </Pressable>
+      <Pressable style={styles.cost}>
+        <Text style={{color: '#000000', fontSize: 18, fontWeight: 'bold'}}>
+          {route.params.cost} NIO{' '}
+        </Text>
+      </Pressable>
+
+      <Pressable style={styles.back} onPress={() => navigation.navigate('P3')}>
+        <Text>
+          <Icon name="angle-left" size={30} color="#000000" />
         </Text>
       </Pressable>
     </SafeAreaView>

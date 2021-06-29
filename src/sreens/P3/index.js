@@ -8,6 +8,7 @@ import {
   SectionList,
   FlatList,
   Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {API, Auth, graphqlOperation} from 'aws-amplify';
@@ -58,7 +59,7 @@ const P3 = () => {
   }, []);
 
   const renderItem = ({item}) => (
-    <Pressable
+    <TouchableOpacity
       style={styles.item}
       onPress={() =>
         navigation.navigate('P4', {
@@ -72,6 +73,7 @@ const P3 = () => {
           lat: route.params.lat,
           lon: route.params.lon,
           place: item.place,
+          id: item.id,
         })
       }>
       <View style={styles.item2}>
@@ -84,7 +86,7 @@ const P3 = () => {
       <View style={styles.item4}>
         <Text style={styles.title}>{item.cost} NIO </Text>
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 
   return (

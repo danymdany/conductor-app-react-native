@@ -80,18 +80,60 @@ const styles = StyleSheet.create({
   },
 
   acept: {
-    width: 150,
-    height: 35,
+    width: 50,
+    height: 50,
     backgroundColor: '#171717',
     position: 'absolute',
 
     bottom: 200,
     right: 10,
-    borderRadius: 10,
+    borderRadius: 100,
 
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+  },
+  start: {
+    width: 40,
+    height: 40,
+    backgroundColor: '#53E628',
+    position: 'absolute',
+
+    bottom: 220,
+    left: 10,
+    borderRadius: 100,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  end: {
+    width: 40,
+    height: 40,
+    backgroundColor: '#D51E1E',
+    position: 'absolute',
+
+    bottom: 150,
+    left: 10,
+    borderRadius: 100,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+
+  cost: {
+    width: 200,
+    height: 40,
+    position: 'absolute',
+
+    top: 10,
+
+    borderRadius: 5,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
 });
 export default styles;
