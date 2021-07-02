@@ -90,56 +90,6 @@ export const getCar = /* GraphQL */ `
   query GetCar($id: ID!) {
     getCar(id: $id) {
       id
-      type
-      latitude
-      longitude
-      heading
-      oneline
-      orders {
-        items {
-          id
-          createdAt
-          type
-          status
-          originLatitude
-          originLongitude
-          duration
-          distance
-          cost
-          place
-          destLatitude
-          destLongitude
-          nota
-          userId
-          carId
-          updatedAt
-        }
-        nextToken
-      }
-      userId
-      user {
-        id
-        username
-        email
-        orders {
-          nextToken
-        }
-        car {
-          id
-          type
-          latitude
-          longitude
-          heading
-          oneline
-          userId
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
     }
   }
 `;

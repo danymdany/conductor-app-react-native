@@ -10,7 +10,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {createCarInfo, updateOrder} from '../../graphql/mutation';
+import {createCarInfo, updateOrder, updateCar} from '../../graphql/mutation';
 import {API, graphqlOperation, Auth} from 'aws-amplify';
 
 import styles from './styles';
@@ -118,6 +118,28 @@ const P4 = () => {
       </View>
     );
   };
+
+  const onUserLocationChange = async () => {
+    // Update the car and set it to active
+    try {
+      const userData = await Auth.currentAuthenticatedUser();
+      const input = {
+        id: userData.attributes.sub,
+        latitude: lat,
+        longitude: lon,
+      };
+      const updatedCarData = await API.graphql(
+        graphqlOperation(updateCar, {input}),
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    onUserLocationChange();
+  });
+
   return (
     <SafeAreaView>
       <MapView
@@ -171,21 +193,19 @@ const P4 = () => {
         </View>
       </Pressable>
 
-      <TouchableOpacity onPress={order} style={styles.acept}>
+      <TouchableOpacity onPress={order} onPressIn={End} style={styles.acept}>
         <Text style={{color: '#ffffff'}}>
-          <Icon name="check" size={17} color="#ffffff" />
+          <Icon name="check" size={20} color="#ffffff" />
         </Text>
       </TouchableOpacity>
-      <Pressable style={styles.start}>
-        <Text style={{color: '#ffffff'}}>
-          <Icon name="check" size={17} color="#ffffff" />
+      <Pressable
+        style={styles.start}
+        onPressIn={() => navigation.navigate('P3')}>
+        <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
+          <Icon name="check" size={17} color="#FFFFFF" /> Terminar carrera
         </Text>
       </Pressable>
-      <Pressable onPress={End} style={styles.end}>
-        <Text style={{color: '#ffffff'}}>
-          <Icon name="close" size={17} color="#ffffff" />
-        </Text>
-      </Pressable>
+
       <Pressable style={styles.cost}>
         <Text style={{color: '#000000', fontSize: 18, fontWeight: 'bold'}}>
           {route.params.cost} NIO{' '}

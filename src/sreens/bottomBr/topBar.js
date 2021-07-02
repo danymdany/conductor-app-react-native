@@ -22,7 +22,9 @@ const Tr = () => {
       </View>
       <Text style={styles.texto}>ordenes </Text>
 
-      <Pressable style={styles.pres}>
+      <Pressable
+        style={styles.pres}
+        onPressIn={() => navigation.navigate('P5')}>
         <Text>
           <Icon name="user" size={30} color="#000000" />
         </Text>

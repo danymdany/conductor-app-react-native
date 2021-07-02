@@ -80,8 +80,8 @@ const styles = StyleSheet.create({
   },
 
   acept: {
-    width: 50,
-    height: 50,
+    width: 55,
+    height: 55,
     backgroundColor: '#171717',
     position: 'absolute',
 
@@ -94,14 +94,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   start: {
-    width: 40,
+    width: 200,
     height: 40,
-    backgroundColor: '#53E628',
+    backgroundColor: '#CE0101',
     position: 'absolute',
 
-    bottom: 220,
-    left: 10,
-    borderRadius: 100,
+    bottom: 130,
+    left: 5,
+    borderRadius: 10,
 
     alignItems: 'center',
     justifyContent: 'center',

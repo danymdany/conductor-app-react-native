@@ -1,130 +1,87 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
-  RefreshControl,
-  ScrollView,
-  FlatList,
-  SafeAreaView,
   TouchableOpacity,
+  View,
+  SafeAreaView,
+  FlatList,
 } from 'react-native';
-import styles from './styles.js';
-import {updateOrder} from '../../graphql/mutation';
-import {API, graphqlOperation, Auth} from 'aws-amplify';
-import {createCarInfo} from '../../graphql/mutation';
+import {listCarInfos} from '../../graphql/query';
+import {onCreateCarInfo} from '../../graphql/real-time-order';
 
-const NewOrderPopup = ({newOrder, onDecline, onAccept, location}) => {
-  const carInfo = async () => {
-    try {
+import {API, Auth, graphqlOperation} from 'aws-amplify';
+import styles from './styles';
+
+const P5 = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [newOrders, setNewOrders] = useState([]);
+
+  useEffect(() => {
+    const updateUsercar = async () => {
+      // GET USER
       const userInfo = await Auth.currentAuthenticatedUser();
-      console.log(userInfo.username);
+      setEmail(userInfo.attributes.email);
+      setName(userInfo.username);
+    };
 
-      const date = new Date();
+    updateUsercar();
+  }, []);
 
-      const input = {
-        createdAt: date.toISOString(),
-        type: newOrder.type,
-        originLatitude: location.lat,
-        originLongitude: location.lon,
-        distance: 1,
-        duration: 1,
-        cost: 1,
-        place: 'place',
-        status: 'NEW',
-        destLatitude: 0,
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
-        destLongitude: 0,
-
-        nota: 'test',
-        userId: 9,
-        carId: '1',
-      };
-      const response = await API.graphql(
-        graphqlOperation(createCarInfo, {
-          input,
-        }),
+  const fetchOrders = async () => {
+    try {
+      const orderData = await API.graphql(
+        graphqlOperation(listCarInfos, {filter: {type: {eq: name}}}),
       );
-      console.log(response);
+      setNewOrders(orderData.data.listCarInfos.items);
     } catch (e) {
       console.error(e);
     }
   };
 
-  const order = async () => {
-    try {
-      const userInfo = await Auth.currentAuthenticatedUser();
+  useEffect(() => {
+    const realTime = API.graphql(graphqlOperation(onCreateCarInfo)).subscribe({
+      next: (data) => {
+        fetchOrders();
+      },
+    });
+  }, []);
 
-      const date = new Date();
+  const renderItem = ({item}) => (
+    <TouchableOpacity style={styles.item}>
+      <View style={styles.item2}>
+        <Text style={styles.infoPlace}>{item.place}</Text>
+      </View>
 
-      const input = {
-        id: newOrder.id,
-        status: 'updated',
-      };
-
-      const response = await API.graphql(
-        graphqlOperation(updateOrder, {
-          input,
-        }),
-      );
-      console.log(response);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const presout = () => {
-    console.log('pressss out');
-  };
-
-  const DATA = [newOrder];
-  const Item = ({item, onPress, backgroundColor, textColor}) => (
-    <TouchableOpacity
-      onPressOut={onAccept}
-      onPress={carInfo}
-      onPressIn={order}
-      style={[styles.item, backgroundColor]}>
-      <Text style={[styles.title1, textColor]}>{item.type}</Text>
-      <Text style={[styles.title2, textColor]}>{item.duration}min</Text>
-      <Text style={[styles.title3, textColor]}>
-        {item.cost} {''}C$
-      </Text>
-      <Text style={[styles.title4, textColor]}>{item.distance}Km</Text>
-      <Text style={[styles.title4, textColor]}>{item.nota}</Text>
-
-      <Text style={[styles.title2, textColor]}>
-        {' '}
-        {'  '}
-        {item.place}
-      </Text>
-
-      <Text style={[styles.title5]}>{item.status}</Text>
+      <View style={styles.item3}>
+        <Text style={styles.name}>{item.type}</Text>
+      </View>
+      <View style={styles.item4}>
+        <Text style={styles.title}>{item.cost} NIO </Text>
+      </View>
     </TouchableOpacity>
   );
-  const [selectedId, setSelectedId] = useState(null);
-
-  const renderItem = ({item}) => {
-    const backgroundColor = item.id === selectedId ? '#000000' : '#ffffff';
-    const color = item.id === selectedId ? 'white' : 'black';
-
-    return (
-      <Item
-        item={newOrder}
-        onPress={() => setSelectedId(item.id)}
-        backgroundColor={{backgroundColor}}
-        textColor={{color}}
-      />
-    );
-  };
-
   return (
-    <SafeAreaView style={styles.root}>
-      <FlatList
-        data={DATA}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        extraData={selectedId}
-      />
+    <SafeAreaView>
+      <View style={styles.root}>
+        <View style={styles.user}></View>
+        <Text style={styles.txt}>{name}</Text>
+        <Text style={styles.txt}>{email}</Text>
+      </View>
+
+      <View style={styles.view}>
+        <FlatList
+          data={newOrders}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
     </SafeAreaView>
   );
 };
 
-export default NewOrderPopup;
+export default P5;

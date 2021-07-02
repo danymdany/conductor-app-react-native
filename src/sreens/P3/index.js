@@ -3,23 +3,20 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   SafeAreaView,
-  ScrollView,
   Text,
-  SectionList,
   FlatList,
-  Pressable,
   TouchableOpacity,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {API, Auth, graphqlOperation} from 'aws-amplify';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {withAuthenticator} from 'aws-amplify-react-native/dist/Auth';
 
 import styles from './styles';
-import Br from '../bottomBr/bottomBar';
 import Tr from '../bottomBr/topBar';
-import {listOrders} from '../../graphql/query';
+import {listOrders, getCar, listCars} from '../../graphql/query';
 import {onCreateOrder, onUpdateOrder} from '../../graphql/real-time-order';
+import {createCar} from '../../graphql/mutation';
+
 // require imports
 
 const P3 = () => {
@@ -56,6 +53,48 @@ const P3 = () => {
         fetchOrders();
       },
     });
+  }, []);
+
+  useEffect(() => {
+    const updateUsercar = async () => {
+      // GET USER
+      const userInfo = await Auth.currentAuthenticatedUser();
+      console.log(userInfo.attributes.sub);
+
+      if (!userInfo) {
+        return;
+      }
+      // CHECK IF HAS A CAR
+      const getCardata = await API.graphql(
+        graphqlOperation(getCar, {
+          id: userInfo.attributes.sub,
+        }),
+      );
+
+      console.log(getCardata);
+
+      if (!!getCardata.data.getCar) {
+        console.log('user has a car ');
+      }
+      // IF NOT ,  CREATE A CAR
+
+      const NewCar = {
+        id: userInfo.attributes.sub,
+        type: 'taxi',
+        latitude: 11,
+        longitude: 0,
+        heading: 1,
+        oneline: true,
+        userId: userInfo.attributes.sub,
+      };
+      await API.graphql(
+        graphqlOperation(createCar, {
+          input: NewCar,
+        }),
+      );
+    };
+
+    updateUsercar();
   }, []);
 
   const renderItem = ({item}) => (

@@ -2,85 +2,88 @@ import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   root: {
-    position: 'absolute',
-    bottom: 0,
     width: '100%',
-    padding: 20,
-    height: '100%',
-    justifyContent: 'space-between',
-    backgroundColor: '#00000099',
-  },
-  popupContainer: {
-    backgroundColor: 'black',
-    borderRadius: 10,
-    height: 250,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-  },
-  minutes: {
-    color: 'lightgrey',
-    fontSize: 36,
-  },
-  distance: {
-    color: 'lightgrey',
-    fontSize: 26,
-  },
-  uberType: {
-    color: 'lightgrey',
-    fontSize: 20,
-    marginHorizontal: 10,
-  },
-
-  nota: {
-    color: 'lightgrey',
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  userBg: {
-    width: 60,
-    height: 60,
-    alignItems: 'center',
+    height: 230,
+    backgroundColor: '#000000',
     justifyContent: 'center',
-  },
-  declineButton: {
-    backgroundColor: '#ffffff',
-    padding: 5,
-    borderRadius: 50,
-    width: 100,
     alignItems: 'center',
   },
-  declineText: {
-    color: 'black',
-    fontWeight: 'bold',
+  user: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+    backgroundColor: '#ffffff',
   },
 
-  scrollView: {},
+  txt: {
+    color: '#ffffff',
+    marginTop: 10,
+  },
+
+  view: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#ffffff',
+  },
   item: {
-    padding: 10,
-    marginVertical: 8,
-    marginHorizontal: 10,
-    borderRadius: 10,
+    backgroundColor: '#fff',
+    padding: 47,
+    marginVertical: 0,
+    marginHorizontal: 2,
+    borderBottomColor: '#C8C8C8',
+    borderBottomWidth: 0.5,
   },
-  title1: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  title2: {
-    fontSize: 15,
-  },
-  title3: {
-    fontSize: 15,
-  },
-  title4: {
-    fontSize: 15,
-  },
+  item2: {
+    width: 300,
+    height: 60,
 
-  title5: {
-    fontSize: 15,
+    marginTop: 35,
+    marginLeft: 10,
+    borderRadius: 5,
+    position: 'absolute',
+  },
+  item3: {
+    width: 100,
+    height: 20,
+
+    margin: 10,
+    position: 'absolute',
+    borderRadius: 5,
+    top: 0,
+    left: 0,
+  },
+  item4: {
+    width: 68,
+    height: 30,
+
+    margin: 10,
+    position: 'absolute',
+    borderRadius: 5,
+    bottom: 0,
+    right: 0,
+  },
+  item5: {
+    width: 30,
+    height: 30,
+
+    margin: 10,
+    position: 'absolute',
+    borderRadius: 5,
+    top: 0,
+    right: 0,
+  },
+  title: {
+    color: '#152939',
     fontWeight: 'bold',
-    color: '#18C800',
+    fontSize: 12.5,
+  },
+  name: {
+    color: '#152939',
+    fontWeight: 'bold',
+  },
+  infoPlace: {
+    color: '#000000',
+    fontSize: 12.5,
   },
 });
 
