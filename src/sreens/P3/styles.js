@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   item: {
-    backgroundColor: '#fff',
+    backgroundColor: '#404040',
     padding: 47,
     marginVertical: 0,
     marginHorizontal: 2,
@@ -49,16 +49,16 @@ const styles = StyleSheet.create({
     right: 0,
   },
   title: {
-    color: '#152939',
+    color: '#ffffff',
     fontWeight: 'bold',
     fontSize: 12.5,
   },
   name: {
-    color: '#152939',
+    color: '#ffffff',
     fontWeight: 'bold',
   },
   infoPlace: {
-    color: '#000000',
+    color: '#ffffff',
     fontSize: 12.5,
   },
 });

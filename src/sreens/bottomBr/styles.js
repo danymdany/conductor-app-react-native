@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#121212',
   },
 
   onlineorder: {
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   texto: {
-    color: '#152939',
+    color: '#ffffff',
     fontWeight: 'bold',
     fontSize: 15,
     textAlign: 'left',

@@ -7,6 +7,8 @@ import P1 from '../sreens/P1/index';
 import P3 from '../sreens/P3/index';
 import P4 from '../sreens/P4';
 import P5 from '../sreens/popup';
+import P6 from '../sreens/P6/index';
+import Alert from '../sreens/AlertScreen/Alert';
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -20,6 +22,8 @@ const App = () => {
         <Stack.Screen name={'P3'} component={P3} />
         <Stack.Screen name={'P4'} component={P4} />
         <Stack.Screen name={'P5'} component={P5} />
+        <Stack.Screen name={'P6'} component={P6} />
+        <Stack.Screen name={'Alert'} component={Alert} />
       </Stack.Navigator>
     </NavigationContainer>
   );

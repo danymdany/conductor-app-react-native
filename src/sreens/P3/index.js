@@ -113,6 +113,7 @@ const P3 = () => {
           lon: route.params.lon,
           place: item.place,
           id: item.id,
+          carid: item.carId,
         })
       }>
       <View style={styles.item2}>
@@ -130,7 +131,7 @@ const P3 = () => {
 
   return (
     <SafeAreaView>
-      <View style={{width: '100%', height: '100%'}}>
+      <View style={{width: '100%', height: '100%', backgroundColor: '#181818'}}>
         <Tr />
 
         <View style={{marginTop: 71, marginBottom: 0}}>

@@ -6,16 +6,16 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 100,
     justifyContent: 'center',
-    backgroundColor: '#171717',
+    backgroundColor: '#ffffff',
   },
   text21: {
-    color: '#ffffff',
+    color: '#000000',
     textAlign: 'center',
     fontWeight: 'bold',
   },
 
   View: {
-    backgroundColor: '#fff',
+    backgroundColor: '#121212',
 
     position: 'absolute',
     bottom: 0,
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
 
   title: {
     fontWeight: 'bold',
+    color: '#ffffff',
   },
   item2: {
     width: 300,
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
   acept: {
     width: 55,
     height: 55,
-    backgroundColor: '#171717',
+    backgroundColor: '#ffffff',
     position: 'absolute',
 
     bottom: 200,
@@ -92,6 +93,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+  },
+  timeout: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'red',
+    position: 'absolute',
+
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   start: {
     width: 200,

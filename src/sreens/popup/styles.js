@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   root: {
     width: '100%',
     height: 230,
-    backgroundColor: '#000000',
+    backgroundColor: '#121212',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -23,10 +23,10 @@ const styles = StyleSheet.create({
   view: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#181818',
   },
   item: {
-    backgroundColor: '#fff',
+    backgroundColor: '#404040',
     padding: 47,
     marginVertical: 0,
     marginHorizontal: 2,
@@ -73,17 +73,32 @@ const styles = StyleSheet.create({
     right: 0,
   },
   title: {
-    color: '#152939',
+    color: '#fff',
     fontWeight: 'bold',
     fontSize: 12.5,
   },
   name: {
-    color: '#152939',
+    color: '#fff',
     fontWeight: 'bold',
   },
   infoPlace: {
-    color: '#000000',
+    color: '#fff',
     fontSize: 12.5,
+  },
+
+  his: {
+    width: 55,
+    height: 55,
+
+    position: 'absolute',
+    borderRadius: 100,
+    top: 2,
+    right: 10,
+    position: 'absolute',
+    backgroundColor: '#ffffff',
+    borderRightWidth: 0.5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

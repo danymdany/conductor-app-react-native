@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, memo} from 'react';
 import {
   Text,
   View,
@@ -12,15 +12,18 @@ import MapViewDirections from 'react-native-maps-directions';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {createCarInfo, updateOrder, updateCar} from '../../graphql/mutation';
 import {API, graphqlOperation, Auth} from 'aws-amplify';
+import {getOrder} from '../../graphql/query';
+import {onUpdateOrder} from '../../graphql/real-time-order';
 
+import mapStyle from './map-style';
 import styles from './styles';
 
 const P4 = () => {
   const [lat, setLat] = useState(0);
   const [lon, setLon] = useState(0);
-
-  const [user, setUser] = useState('');
-  console.log(user);
+  const [userstate, setUserState] = useState();
+  const [variation, setVariation] = useState();
+  console.log(userstate);
 
   const loc = (event) => {
     const lat = event.nativeEvent.coordinate.latitude;
@@ -32,7 +35,7 @@ const P4 = () => {
     try {
       const input = {
         id: route.params.id,
-        status: 'updated',
+        status: 'ongoing',
       };
 
       const response = await API.graphql(
@@ -46,15 +49,12 @@ const P4 = () => {
     }
   };
 
-  console.log(lat, lon);
-
   const route = useRoute();
   const navigation = useNavigation();
 
   const order = async () => {
     try {
       const userInfo = await Auth.currentAuthenticatedUser();
-      setUser(userInfo.username);
 
       const date = new Date();
 
@@ -65,8 +65,8 @@ const P4 = () => {
         originLongitude: lon,
         distance: 1,
         duration: 1,
-        cost: 1,
-        place: '',
+        cost: route.params.cost,
+        place: route.params.id,
         status: 'NEW',
         destLatitude: lat,
         destLongitude: lon,
@@ -80,7 +80,6 @@ const P4 = () => {
           input,
         }),
       );
-      console.log(response);
     } catch (e) {
       console.error(e);
     }
@@ -123,6 +122,8 @@ const P4 = () => {
     // Update the car and set it to active
     try {
       const userData = await Auth.currentAuthenticatedUser();
+
+      setVariation(userData.attributes.sub);
       const input = {
         id: userData.attributes.sub,
         latitude: lat,
@@ -140,12 +141,37 @@ const P4 = () => {
     onUserLocationChange();
   });
 
+  const updateUsercar = async () => {
+    // GET USER
+
+    // CHECK IF HAS A CAR
+    const getCardata = await API.graphql(
+      graphqlOperation(getOrder, {
+        id: route.params.id,
+      }),
+    );
+
+    setUserState(getCardata.data.getOrder.status);
+
+    // IF NOT ,  CREATE A CAR
+  };
+
+  useEffect(() => {
+    updateUsercar();
+  }, []);
+  const realTime = API.graphql(graphqlOperation(onUpdateOrder)).subscribe({
+    next: (data) => {
+      updateUsercar();
+    },
+  });
+  console.log(variation);
   return (
     <SafeAreaView>
       <MapView
         style={{height: '100%', width: '100%'}}
         provider={PROVIDER_GOOGLE}
         showsMyLocationButton={false}
+        customMapStyle={mapStyle}
         onUserLocationChange={loc}
         showsUserLocation={true}
         showsCompass={false}
@@ -175,13 +201,13 @@ const P4 = () => {
           destination={destination}
           apikey={GOOGLE_MAPS_APIKEY}
           strokeWidth={4}
-          strokeColor="#171717"
+          strokeColor="#ffffff"
         />
       </MapView>
 
       <Pressable style={styles.View}>
         <View style={styles.item2}>
-          <Text>{route.params.place}</Text>
+          <Text style={styles.title}>{route.params.place}</Text>
         </View>
 
         <View style={styles.item3}>
@@ -193,21 +219,36 @@ const P4 = () => {
         </View>
       </Pressable>
 
-      <TouchableOpacity onPress={order} onPressIn={End} style={styles.acept}>
-        <Text style={{color: '#ffffff'}}>
-          <Icon name="check" size={20} color="#ffffff" />
-        </Text>
-      </TouchableOpacity>
-      <Pressable
-        style={styles.start}
-        onPressIn={() => navigation.navigate('P3')}>
-        <Text style={{color: '#ffffff', fontWeight: 'bold'}}>
-          <Icon name="check" size={17} color="#FFFFFF" /> Terminar carrera
-        </Text>
-      </Pressable>
+      {userstate === 'NEW' && (
+        <TouchableOpacity
+          onPress={order}
+          onPressIn={End}
+          onPressOut={() =>
+            navigation.navigate('P6', {
+              origins,
+              cost: route.params.cost,
+              type: route.params.name,
+              id: route.params.id,
+              carId: route.params.carid,
+              variate: variation,
+            })
+          }
+          style={styles.acept}>
+          <Text>
+            <Icon name="check" size={20} color="#000000" />
+          </Text>
+        </TouchableOpacity>
+      )}
 
+      {userstate === 'ongoing' && (
+        <TouchableOpacity
+          onPressOut={() => navigation.navigate('P3')}
+          style={styles.timeout}>
+          <Text style={{color: '#ffffff'}}>esta orden ya fue tomada</Text>
+        </TouchableOpacity>
+      )}
       <Pressable style={styles.cost}>
-        <Text style={{color: '#000000', fontSize: 18, fontWeight: 'bold'}}>
+        <Text style={{color: '#fff', fontSize: 18, fontWeight: 'bold'}}>
           {route.params.cost} NIO{' '}
         </Text>
       </Pressable>
@@ -221,4 +262,4 @@ const P4 = () => {
   );
 };
 
-export default P4;
+export default memo(P4);

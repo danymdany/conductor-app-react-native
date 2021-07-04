@@ -5,9 +5,11 @@ import {
   View,
   SafeAreaView,
   FlatList,
+  Pressable,
 } from 'react-native';
 import {listCarInfos} from '../../graphql/query';
 import {onCreateCarInfo} from '../../graphql/real-time-order';
+import Icon from 'react-native-vector-icons/Feather';
 
 import {API, Auth, graphqlOperation} from 'aws-amplify';
 import styles from './styles';
@@ -28,10 +30,6 @@ const P5 = () => {
     updateUsercar();
   }, []);
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
   const fetchOrders = async () => {
     try {
       const orderData = await API.graphql(
@@ -42,14 +40,6 @@ const P5 = () => {
       console.error(e);
     }
   };
-
-  useEffect(() => {
-    const realTime = API.graphql(graphqlOperation(onCreateCarInfo)).subscribe({
-      next: (data) => {
-        fetchOrders();
-      },
-    });
-  }, []);
 
   const renderItem = ({item}) => (
     <TouchableOpacity style={styles.item}>
@@ -79,6 +69,9 @@ const P5 = () => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         />
+        <Pressable style={styles.his} onPress={fetchOrders}>
+          <Icon name="clock" size={20} color="#000000" />
+        </Pressable>
       </View>
     </SafeAreaView>
   );

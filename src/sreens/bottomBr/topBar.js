@@ -26,7 +26,7 @@ const Tr = () => {
         style={styles.pres}
         onPressIn={() => navigation.navigate('P5')}>
         <Text>
-          <Icon name="user" size={30} color="#000000" />
+          <Icon name="user" size={30} color="#ffffff" />
         </Text>
       </Pressable>
     </Pressable>
