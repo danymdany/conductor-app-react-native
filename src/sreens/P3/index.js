@@ -15,12 +15,13 @@ import styles from './styles';
 import Tr from '../bottomBr/topBar';
 import {listOrders, getCar, listCars} from '../../graphql/query';
 import {onCreateOrder, onUpdateOrder} from '../../graphql/real-time-order';
-import {createCar} from '../../graphql/mutation';
+import {createCar, updateCar} from '../../graphql/mutation';
 
 // require imports
 
 const P3 = () => {
   const [newOrders, setNewOrders] = useState([]);
+  const [online, setOneline] = useState(true);
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -59,7 +60,6 @@ const P3 = () => {
     const updateUsercar = async () => {
       // GET USER
       const userInfo = await Auth.currentAuthenticatedUser();
-      console.log(userInfo.attributes.sub);
 
       if (!userInfo) {
         return;
@@ -70,8 +70,6 @@ const P3 = () => {
           id: userInfo.attributes.sub,
         }),
       );
-
-      console.log(getCardata);
 
       if (!!getCardata.data.getCar) {
         console.log('user has a car ');
@@ -96,6 +94,48 @@ const P3 = () => {
 
     updateUsercar();
   }, []);
+
+  const ofline = async () => {
+    const userInfo = await Auth.currentAuthenticatedUser();
+
+    try {
+      const input = {
+        id: userInfo.attributes.sub,
+        oneline: false,
+        type: 'out-road',
+      };
+
+      const response = await API.graphql(
+        graphqlOperation(updateCar, {
+          input,
+        }),
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const oneline = async () => {
+    const userInfo = await Auth.currentAuthenticatedUser();
+
+    try {
+      const input = {
+        id: userInfo.attributes.sub,
+        oneline: true,
+        type: 'taxi',
+      };
+
+      const response = await API.graphql(
+        graphqlOperation(updateCar, {
+          input,
+        }),
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const renderItem = ({item}) => (
     <TouchableOpacity
@@ -125,22 +165,40 @@ const P3 = () => {
       </View>
       <View style={styles.item4}>
         <Text style={styles.title}>{item.cost} NIO </Text>
+        <Text style={styles.title}>{console.log('sss')} km </Text>
       </View>
     </TouchableOpacity>
   );
-
   return (
     <SafeAreaView>
       <View style={{width: '100%', height: '100%', backgroundColor: '#181818'}}>
         <Tr />
 
-        <View style={{marginTop: 71, marginBottom: 0}}>
-          <FlatList
-            data={newOrders}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-          />
-        </View>
+        {online === true && (
+          <View style={{marginTop: 71, marginBottom: 0}}>
+            <FlatList
+              data={newOrders}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+            />
+          </View>
+        )}
+        {online === true && (
+          <TouchableOpacity
+            style={styles.oneline}
+            onPressIn={ofline}
+            onPress={() => setOneline(!online)}>
+            {online === true && <Text>ON</Text>}
+          </TouchableOpacity>
+        )}
+        {online === false && (
+          <TouchableOpacity
+            style={styles.ofline}
+            onPressIn={oneline}
+            onPress={() => setOneline(!online)}>
+            <Text style={{color: '#fff'}}>OFF</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );

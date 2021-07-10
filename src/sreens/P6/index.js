@@ -12,7 +12,11 @@ import {
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
 import {API, graphqlOperation, Auth} from 'aws-amplify';
-import {createCarInfo, updateOrder, updateCar} from '../../graphql/mutation';
+import {
+  createCarInfo,
+  updateOrder,
+  updateCarInfo,
+} from '../../graphql/mutation';
 import {getOrder} from '../../graphql/query';
 import {onUpdateOrder} from '../../graphql/real-time-order';
 
@@ -69,29 +73,7 @@ const P6 = () => {
     }
   };
 
-  const start = async () => {
-    try {
-      const input = {
-        id: route.params.id,
-        carId: email,
-        status: 'taked',
-      };
-
-      const response = await API.graphql(
-        graphqlOperation(updateOrder, {
-          input,
-        }),
-      );
-      console.log(response);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   const updateUsercar = async () => {
-    // GET USER
-
-    // CHECK IF HAS A CAR
     const getCardata = await API.graphql(
       graphqlOperation(getOrder, {
         id: route.params.id,
@@ -99,8 +81,6 @@ const P6 = () => {
     );
 
     setUserState(getCardata.data.getOrder.status);
-
-    // IF NOT ,  CREATE A CAR
   };
 
   useEffect(() => {
@@ -114,15 +94,12 @@ const P6 = () => {
 
   useEffect(() => {
     const updateUsercar = async () => {
-      // GET USER
       const userInfo = await Auth.currentAuthenticatedUser();
       setEmail(userInfo.attributes.sub);
     };
 
     updateUsercar();
   }, []);
-  console.log(email);
-  console.log(route.params.carId);
   return (
     <SafeAreaView>
       <View style={styles.view}>
@@ -159,20 +136,7 @@ const P6 = () => {
         </Pressable>
 
         <Text style={styles.texop}>cancelar orden </Text>
-        {userstate === 'taked' && (
-          <Pressable style={styles.taked}>
-            <Text style={{color: '#fff', fontWeight: 'bold'}}>
-              esta orden fue tomada
-            </Text>
-          </Pressable>
-        )}
-        {userstate === 'ongoing' && (
-          <Pressable style={styles.start} onPress={start}>
-            <Text style={{color: '#fff', fontWeight: 'bold'}}>
-              comenzar carrera
-            </Text>
-          </Pressable>
-        )}
+
         {userstate === 'cancelled' && (
           <Text style={styles.status}>
             la orden fue cancelada por el cliente{' '}

@@ -61,6 +61,33 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 12.5,
   },
+
+  oneline: {
+    width: 50,
+    height: 50,
+
+    position: 'absolute',
+    borderRadius: 100,
+
+    right: 10,
+    bottom: 100,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  ofline: {
+    width: 50,
+    height: 50,
+
+    position: 'absolute',
+    borderRadius: 100,
+
+    right: 10,
+    bottom: 100,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default styles;

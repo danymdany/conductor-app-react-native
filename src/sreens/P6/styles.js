@@ -101,17 +101,15 @@ const styles = StyleSheet.create({
   },
 
   taked: {
-    width: 200,
-    height: 400,
+    width: 250,
+    height: '100%',
     backgroundColor: 'red',
-    right: 10,
     borderRadius: 10,
-    borderRightWidth: 0.3,
 
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 80,
     position: 'absolute',
+    right: 0,
   },
 });
 

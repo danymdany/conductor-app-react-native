@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Image, ImageBackground} from 'react-native';
+import {View, Image, ImageBackground, BackHandler, Alert} from 'react-native';
 import LottieView from 'lottie-react-native';
 import {useNavigation} from '@react-navigation/native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -23,8 +23,26 @@ const P1 = () => {
       lon,
     });
   };
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert('espera!', 'estas seguro que quieres salir de la app ', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {text: 'YES', onPress: () => BackHandler.exitApp()},
+      ]);
+      return true;
+    };
 
-  console.log(lat);
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <ImageBackground
