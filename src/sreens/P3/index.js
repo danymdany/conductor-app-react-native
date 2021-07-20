@@ -1,4 +1,3 @@
-// screen to go at  map app
 import React, {useEffect, useState} from 'react';
 import {
   View,

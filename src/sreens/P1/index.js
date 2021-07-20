@@ -28,7 +28,7 @@ const P1 = () => {
       Alert.alert('espera!', 'estas seguro que quieres salir de la app ', [
         {
           text: 'Cancel',
-          onPress: () => null,
+          onPress: () => navigation.navigate('P3'),
           style: 'cancel',
         },
         {text: 'YES', onPress: () => BackHandler.exitApp()},
