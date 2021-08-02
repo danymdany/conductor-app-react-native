@@ -9,6 +9,8 @@ import P4 from '../sreens/P4';
 import P5 from '../sreens/popup';
 import P6 from '../sreens/P6/index';
 import Alert from '../sreens/AlertScreen/Alert';
+import AuthFlow from '../singUp/AuthFlow';
+
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -24,6 +26,7 @@ const App = () => {
         <Stack.Screen name={'P5'} component={P5} />
         <Stack.Screen name={'P6'} component={P6} />
         <Stack.Screen name={'Alert'} component={Alert} />
+        <Stack.Screen name={'AuthFlow'} component={AuthFlow} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -6,22 +6,10 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import styles from './styles';
 
 const P1 = () => {
-  const [lat, setLat] = useState(0);
-  const [lon, setLon] = useState(0);
   const navigation = useNavigation();
 
-  const gps = (event) => {
-    const lat = event.nativeEvent.coordinate.latitude;
-    const lon = event.nativeEvent.coordinate.longitude;
-    setLat(lat);
-    setLon(lon);
-  };
-
   const move = () => {
-    navigation.navigate('P3', {
-      lat,
-      lon,
-    });
+    navigation.navigate('AuthFlow');
   };
   useEffect(() => {
     const backAction = () => {
@@ -49,19 +37,6 @@ const P1 = () => {
       source={require('../../animations/bg.jpg')}
       style={styles.image}>
       <View style={styles.view}>
-        <MapView
-          style={{height: 1, width: 1, top: 1, left: 1}}
-          provider={PROVIDER_GOOGLE}
-          onUserLocationChange={gps}
-          showsMyLocationButton={false}
-          showsUserLocation={true}
-          showsCompass={false}
-          initialRegion={{
-            latitude: 0,
-            longitude: 0,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}></MapView>
         <Image
           style={styles.img}
           source={require('../../animations/logo.png')}

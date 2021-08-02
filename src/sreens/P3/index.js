@@ -8,17 +8,19 @@ import {
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {API, Auth, graphqlOperation} from 'aws-amplify';
-import {withAuthenticator} from 'aws-amplify-react-native/dist/Auth';
 
 import styles from './styles';
 import Tr from '../bottomBr/topBar';
 import {listOrders, getCar, listCars} from '../../graphql/query';
 import {onCreateOrder, onUpdateOrder} from '../../graphql/real-time-order';
 import {createCar, updateCar} from '../../graphql/mutation';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 
 // require imports
 
 const P3 = () => {
+  const [lat, setLat] = useState(0);
+  const [lon, setLon] = useState(0);
   const [newOrders, setNewOrders] = useState([]);
   const [online, setOneline] = useState(true);
   const navigation = useNavigation();
@@ -168,10 +170,54 @@ const P3 = () => {
       </View>
     </TouchableOpacity>
   );
+
+  const loc = (event) => {
+    const lat = event.nativeEvent.coordinate.latitude;
+    const lon = event.nativeEvent.coordinate.longitude;
+    setLat(lat);
+    setLon(lon);
+  };
+  const onUserLocationChange = async () => {
+    // Update the car and set it to active
+    try {
+      const userData = await Auth.currentAuthenticatedUser();
+
+      const input = {
+        id: userData.attributes.sub,
+        latitude: lat,
+        longitude: lon,
+      };
+      const updatedCarData = await API.graphql(
+        graphqlOperation(updateCar, {input}),
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    onUserLocationChange();
+  });
   return (
     <SafeAreaView>
       <View style={{width: '100%', height: '100%', backgroundColor: '#181818'}}>
         <Tr />
+
+        <View>
+          <MapView
+            style={{height: 0, width: 0}}
+            provider={PROVIDER_GOOGLE}
+            showsMyLocationButton={false}
+            onUserLocationChange={loc}
+            showsUserLocation={true}
+            showsCompass={false}
+            initialRegion={{
+              latitude: 0,
+              longitude: 0,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}></MapView>
+        </View>
 
         {online === true && (
           <View style={{marginTop: 71, marginBottom: 0}}>
@@ -203,4 +249,4 @@ const P3 = () => {
   );
 };
 
-export default withAuthenticator(P3);
+export default P3;

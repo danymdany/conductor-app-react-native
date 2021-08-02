@@ -16,13 +16,17 @@ import {
   createCarInfo,
   updateOrder,
   updateCarInfo,
+  updateCar,
 } from '../../graphql/mutation';
 import {getOrder} from '../../graphql/query';
 import {onUpdateOrder} from '../../graphql/real-time-order';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 
 import styles from './styles';
 
 const P6 = () => {
+  const [lat, setLat] = useState(0);
+  const [lon, setLon] = useState(0);
   const [userstate, setUserState] = useState();
   const [email, setEmail] = useState('');
 
@@ -100,8 +104,52 @@ const P6 = () => {
 
     updateUsercar();
   }, []);
+
+  const loc = (event) => {
+    const lat = event.nativeEvent.coordinate.latitude;
+    const lon = event.nativeEvent.coordinate.longitude;
+    setLat(lat);
+    setLon(lon);
+  };
+  const onUserLocationChange = async () => {
+    // Update the car and set it to active
+    try {
+      const userData = await Auth.currentAuthenticatedUser();
+
+      const input = {
+        id: userData.attributes.sub,
+        latitude: lat,
+        longitude: lon,
+      };
+      const updatedCarData = await API.graphql(
+        graphqlOperation(updateCar, {input}),
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    onUserLocationChange();
+  });
   return (
     <SafeAreaView>
+      <View>
+        <MapView
+          style={{height: 0, width: 0}}
+          provider={PROVIDER_GOOGLE}
+          showsMyLocationButton={false}
+          onUserLocationChange={loc}
+          showsUserLocation={true}
+          showsCompass={false}
+          initialRegion={{
+            latitude: 0,
+            longitude: 0,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}></MapView>
+      </View>
+
       <View style={styles.view}>
         <View style={styles.logo}>
           <ImageBackground
