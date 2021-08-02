@@ -5,12 +5,11 @@ import {PermissionsAndroid, Platform} from 'react-native';
 import App from './src/Nav/index';
 import Amplify, {API, Auth, graphqlOperation} from 'aws-amplify';
 import config from './aws-exports/aws-exports';
- import {withAuthenticator} from 'aws-amplify-react-native/dist/Auth';
- Amplify.configure(config);
+import {withAuthenticator} from 'aws-amplify-react-native/dist/Auth';
+
+Amplify.configure(config);
 
 const all = () => {
-  
-
   const Permission = async () => {
     try {
       const granted = await PermissionsAndroid.request(

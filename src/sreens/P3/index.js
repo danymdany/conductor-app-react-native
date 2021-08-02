@@ -5,6 +5,7 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {API, Auth, graphqlOperation} from 'aws-amplify';
@@ -15,6 +16,7 @@ import {listOrders, getCar, listCars} from '../../graphql/query';
 import {onCreateOrder, onUpdateOrder} from '../../graphql/real-time-order';
 import {createCar, updateCar} from '../../graphql/mutation';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import PushNotification from 'react-native-push-notification';
 
 // require imports
 
@@ -45,6 +47,7 @@ const P3 = () => {
     const realTime = API.graphql(graphqlOperation(onCreateOrder)).subscribe({
       next: (data) => {
         fetchOrders();
+        sms();
       },
     });
   }, []);
@@ -198,6 +201,39 @@ const P3 = () => {
   useEffect(() => {
     onUserLocationChange();
   });
+  const sms = () => {
+    PushNotification.configure({
+      // onNotification is called when a notification is to be emitted
+      onNotification: () => console.log(''),
+
+      // Permissions to register for iOS
+
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+
+      popInitialNotification: true,
+      requestPermissions: Platform.OS === 'ios',
+    });
+
+    PushNotification.createChannel({
+      channelId: 'pop',
+      channelName: 'test',
+    });
+
+    PushNotification.localNotification({
+      /* Android Only Properties */
+      channelId: 'pop', // (required) channelId, if the channel doesn't exist, notification will not trigger.
+
+      title: 'conductor', // (optional)
+      message: 'Nueva orden!!!! ', // (required)
+      soundName: 'sound1.mp3',
+      playSound: true,
+    });
+  };
+
   return (
     <SafeAreaView>
       <View style={{width: '100%', height: '100%', backgroundColor: '#181818'}}>
@@ -231,7 +267,7 @@ const P3 = () => {
         {online === true && (
           <TouchableOpacity
             style={styles.oneline}
-            onPressIn={ofline}
+            onPressIn={oneline}
             onPress={() => setOneline(!online)}>
             {online === true && <Text>ON</Text>}
           </TouchableOpacity>
