@@ -8235,6 +8235,11 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+react-native-background-fetch@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-background-fetch/-/react-native-background-fetch-4.0.3.tgz#b9a8a918f90e8df8486ff6ec04607406e1cb57cc"
+  integrity sha512-Rh/xmlLJwt7dtbXBm2jv0WS+KNBG9di/Vd1qut7Mi88Ap2C+8Yv3UOcEacs3VUSauw3moWtnMtDBaoK9ZgYOIQ==
+
 react-native-geolocation-service@^5.3.0-beta.1:
   version "5.3.0-beta.1"
   resolved "https://registry.yarnpkg.com/react-native-geolocation-service/-/react-native-geolocation-service-5.3.0-beta.1.tgz#91b78e8f87caa0fd4fd1a2384bb48a6309ec715a"

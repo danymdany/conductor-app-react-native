@@ -17,6 +17,7 @@ import {onCreateOrder, onUpdateOrder} from '../../graphql/real-time-order';
 import {createCar, updateCar} from '../../graphql/mutation';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import PushNotification from 'react-native-push-notification';
+import BackgroundFetch from 'react-native-background-fetch';
 
 // require imports
 
@@ -201,6 +202,27 @@ const P3 = () => {
   useEffect(() => {
     onUserLocationChange();
   });
+
+  useEffect(() => {
+    BackgroundFetch.configure(
+      {
+        minimumFetchInterval: 0.1, // fetch interval in minutes
+      },
+      async (taskId) => {
+        console.log('Received background-fetch event: ', taskId);
+
+        // 3. Insert code you want to run in the background, for example:
+
+        fetchOrders();
+        // Call finish upon completion of the background task
+        BackgroundFetch.finish(taskId);
+      },
+      (error) => {
+        console.error('RNBackgroundFetch failed to start.');
+      },
+    );
+  });
+
   const sms = () => {
     PushNotification.configure({
       // onNotification is called when a notification is to be emitted
@@ -229,7 +251,7 @@ const P3 = () => {
 
       title: 'conductor', // (optional)
       message: 'Nueva orden!!!! ', // (required)
-      soundName: 'sound1.mp3',
+      soundName: 'default',
       playSound: true,
     });
   };
