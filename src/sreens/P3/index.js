@@ -170,7 +170,6 @@ const P3 = () => {
       </View>
       <View style={styles.item4}>
         <Text style={styles.title}>{item.cost} NIO </Text>
-        <Text style={styles.title}>{console.log('sss')} km </Text>
       </View>
     </TouchableOpacity>
   );
@@ -289,7 +288,7 @@ const P3 = () => {
         {online === true && (
           <TouchableOpacity
             style={styles.oneline}
-            onPressIn={oneline}
+            onPressIn={ofline}
             onPress={() => setOneline(!online)}>
             {online === true && <Text>ON</Text>}
           </TouchableOpacity>

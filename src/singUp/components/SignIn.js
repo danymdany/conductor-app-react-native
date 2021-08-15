@@ -8,8 +8,9 @@ import styles from './styles';
 const SignIn = (props) => {
   const [username, onChangeUsername] = React.useState('');
   const [password, onChangePassword] = React.useState('');
+  const [mistake, setMistake] = React.useState('');
 
-  let input1 = username.replace(/\s+/g, ',');
+  let input1 = username.replace(/\s+/g, '');
   let input2 = password.replace(/\s+/g, '');
 
   async function signIn() {
@@ -17,6 +18,10 @@ const SignIn = (props) => {
       const user = await Auth.signIn(input1, input2);
     } catch (error) {
       console.log('error signing in', error);
+      setMistake(
+        'puede que el nombre de usuario o contraseña sean incorrectos',
+      );
+      console.log(mistake);
     }
   }
 
@@ -46,6 +51,7 @@ const SignIn = (props) => {
         <TouchableOpacity style={styles.press2} onPress={signIn}>
           <Text style={styles.info2}>iniciar sesion</Text>
         </TouchableOpacity>
+        <Text style={styles.mistake}>{mistake}</Text>
         <TouchableOpacity
           style={styles.bottomLinkLeft}
           onPress={() => props.onStateChange('signUp', {})}>

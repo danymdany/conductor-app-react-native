@@ -20,13 +20,12 @@ const Tr = () => {
           style={styles.imgs}
           source={require('../../animations/logo.png')}></ImageBackground>
       </View>
-      <Text style={styles.texto}>ordenes </Text>
 
       <Pressable
         style={styles.pres}
         onPressIn={() => navigation.navigate('P5')}>
         <Text>
-          <Icon name="user" size={30} color="#ffffff" />
+          <Icon name="user" size={26} color="#ffffff" />
         </Text>
       </Pressable>
     </Pressable>

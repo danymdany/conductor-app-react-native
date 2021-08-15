@@ -23,6 +23,11 @@ const P4 = () => {
   const [lon, setLon] = useState(0);
   const [userstate, setUserState] = useState();
   const [variation, setVariation] = useState();
+
+  const [allinfo, setAllinfo] = useState({
+    distance: 10,
+    duration: 1000,
+  });
   console.log(userstate);
 
   const loc = (event) => {
@@ -70,7 +75,7 @@ const P4 = () => {
         status: 'NEW',
         destLatitude: lat,
         destLongitude: lon,
-        nota: '',
+        nota: userInfo.attributes.sub,
         userId: route.params.name,
         carId: userInfo.username,
       };
@@ -165,6 +170,16 @@ const P4 = () => {
     },
   });
   console.log(variation);
+
+  const km = (event) => {
+    setAllinfo({
+      distance: event.distance,
+      duration: event.duration,
+    });
+  };
+
+  const distance = allinfo.distance.toFixed(1);
+
   return (
     <SafeAreaView>
       <MapView
@@ -200,7 +215,8 @@ const P4 = () => {
           origin={origins}
           destination={destination}
           apikey={GOOGLE_MAPS_APIKEY}
-          strokeWidth={4}
+          strokeWidth={2}
+          onReady={km}
           strokeColor="#ffffff"
         />
       </MapView>
@@ -225,12 +241,14 @@ const P4 = () => {
           onPressIn={End}
           onPressOut={() =>
             navigation.navigate('P6', {
-              origins,
               cost: route.params.cost,
               type: route.params.name,
               id: route.params.id,
               carId: route.params.carid,
               variate: variation,
+              distance: distance,
+              destination: destination,
+              origins: origins,
             })
           }
           style={styles.acept}>

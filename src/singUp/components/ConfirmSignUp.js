@@ -8,15 +8,18 @@ import styles from './styles';
 const ConfirmSignUp = (props) => {
   const [username, onChangeUsername] = React.useState('');
   const [password, onChangePassword] = React.useState('');
+  const [mistake, setMistake] = React.useState('');
 
-  let input1 = username.replace(/\s+/g, ',');
+  let input1 = username.replace(/\s+/g, '');
   let input2 = password;
 
   async function confirmSignUp() {
     try {
       await Auth.confirmSignUp(input1, input2);
+      return props.onStateChange('signIn', {});
     } catch (error) {
       console.log('error confirming sign up', error);
+      setMistake('codigo incorrecto o nombre de usuario');
     }
   }
   if (props.authState === 'confirmSignUp')
@@ -46,6 +49,7 @@ const ConfirmSignUp = (props) => {
         <TouchableOpacity style={styles.press2} onPress={confirmSignUp}>
           <Text style={styles.info2}>confirmar </Text>
         </TouchableOpacity>
+        <Text style={styles.mistake}>{mistake}</Text>
         <TouchableOpacity
           style={styles.bottomLinkLeft}
           onPress={() => props.onStateChange('signIn', {})}>

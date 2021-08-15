@@ -98,6 +98,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  mistake: {
+    color: 'red',
+  },
 });
 
 export default styles;

@@ -9,8 +9,9 @@ const SignUp = (props) => {
   const [username, onChangeUsername] = React.useState('');
   const [password, onChangePassword] = React.useState('');
   const [Email, onChangeEmail] = React.useState('');
+  const [mistake, setMistake] = React.useState('');
 
-  let input1 = username.replace(/\s+/g, ',');
+  let input1 = username.replace(/\s+/g, '');
   let input2 = password.replace(/\s+/g, '');
   let input3 = Email.replace(/\s+/g, '');
 
@@ -24,8 +25,10 @@ const SignUp = (props) => {
         },
       });
       console.log(user);
+      return props.onStateChange('confirmSignUp', {});
     } catch (error) {
       console.log('error signing up:', error);
+      setMistake('intenta cambiar tu nombre de usuario o  verifica tu correo ');
     }
   }
 
@@ -69,6 +72,7 @@ const SignUp = (props) => {
         <TouchableOpacity style={styles.press2} onPress={signUp}>
           <Text style={styles.info2}>crear cuenta</Text>
         </TouchableOpacity>
+        <Text style={styles.mistake}>{mistake}</Text>
         <TouchableOpacity
           style={styles.bottomLinkLeft}
           onPress={() => props.onStateChange('confirmSignUp', {})}>

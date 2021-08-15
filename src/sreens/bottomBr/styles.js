@@ -140,9 +140,10 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: 65,
-    height: 65,
+    width: 60,
+    height: 60,
     borderRadius: 100,
+    marginLeft: 10,
   },
 
   imgs: {
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 100,
-    marginLeft: 200,
+    marginLeft: 300,
     justifyContent: 'center',
     alignItems: 'center',
   },
