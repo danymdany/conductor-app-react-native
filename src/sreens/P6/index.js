@@ -228,8 +228,7 @@ const P6 = () => {
       {userstate === 'rejected' && (
         <TouchableOpacity
           style={styles.back}
-          onPress={() => navigator.navigate('P3')}
-          onPressIn={End}>
+          onPress={() => navigator.navigate('P3')}>
           <Icon name="log-out" size={20} color="#000000" />
         </TouchableOpacity>
       )}

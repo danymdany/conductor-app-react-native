@@ -144,6 +144,9 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 100,
     marginLeft: 10,
+    position: 'absolute',
+    top: 10,
+    left: 10,
   },
 
   imgs: {
@@ -160,6 +163,9 @@ const styles = StyleSheet.create({
     marginLeft: 300,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'absolute',
+    top: 10,
+    right: 10,
   },
 });
 
