@@ -27,6 +27,10 @@ const P6 = () => {
   const [lon, setLon] = useState(0);
   const [userstate, setUserState] = useState('');
   const [email, setEmail] = useState('');
+  const [allinfo, setAllinfo] = useState({
+    distance: 10,
+    duration: 1000,
+  });
 
   const route = useRoute();
   const navigator = useNavigation();
@@ -150,6 +154,13 @@ const P6 = () => {
 
   const GOOGLE_MAPS_APIKEY = 'AIzaSyDC5YeK0OuXzBkkpcdYF71wTjtIGVV4NgE';
 
+  const km = (event) => {
+    setAllinfo({
+      distance: event.distance,
+      duration: event.duration,
+    });
+  };
+  const distance = allinfo.distance.toFixed(1);
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -171,6 +182,7 @@ const P6 = () => {
             origin={route.params.origins}
             destination={route.params.destination}
             apikey={GOOGLE_MAPS_APIKEY}
+            onReady={km}
             strokeWidth={2}
             strokeColor="#fff"
           />
@@ -178,7 +190,7 @@ const P6 = () => {
       </View>
 
       <View style={styles.info1}>
-        <Text style={styles.infotxt}>{route.params.distance} KM </Text>
+        <Text style={styles.infotxt}>{distance} KM </Text>
       </View>
 
       <View style={styles.info2}>

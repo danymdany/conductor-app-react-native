@@ -14,8 +14,12 @@ import {API, Auth, graphqlOperation} from 'aws-amplify';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import styles from './styles';
-import {listOrders, getCar} from '../../graphql/query';
-import {onCreateOrder, onUpdateOrder} from '../../graphql/real-time-order';
+import {listOrders, getCar, listCars} from '../../graphql/query';
+import {
+  onCreateOrder,
+  onUpdateOrder,
+  onUpdateCar,
+} from '../../graphql/real-time-order';
 import {createCar, updateCar} from '../../graphql/mutation';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import PushNotification from 'react-native-push-notification';
@@ -24,8 +28,10 @@ import BackgroundFetch from 'react-native-background-fetch';
 const P3 = () => {
   const [lat, setLat] = useState(0);
   const [lon, setLon] = useState(0);
+  const [checkState, setCheckState] = useState([]);
   const [newOrders, setNewOrders] = useState([]);
   const [online, setOneline] = useState(true);
+  const [saldo, setSaldo] = useState(0);
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -44,6 +50,13 @@ const P3 = () => {
       console.error(e);
     }
   };
+  useEffect(() => {
+    const realTime = API.graphql(graphqlOperation(onUpdateCar)).subscribe({
+      next: (data) => {
+        MoneyState();
+      },
+    });
+  }, []);
 
   useEffect(() => {
     const realTime = API.graphql(graphqlOperation(onCreateOrder)).subscribe({
@@ -78,7 +91,7 @@ const P3 = () => {
       );
 
       if (!!getCardata.data.getCar) {
-        console.log('user has a car ');
+        return true;
       }
       // IF NOT ,  CREATE A CAR
 
@@ -87,7 +100,7 @@ const P3 = () => {
         type: 'taxi',
         latitude: 11,
         longitude: 0,
-        heading: 1,
+        heading: 100,
         oneline: true,
         userId: userInfo.attributes.sub,
       };
@@ -116,7 +129,6 @@ const P3 = () => {
           input,
         }),
       );
-      console.log(response);
     } catch (e) {
       console.error(e);
     }
@@ -137,7 +149,6 @@ const P3 = () => {
           input,
         }),
       );
-      console.log(response);
     } catch (e) {
       console.error(e);
     }
@@ -288,7 +299,7 @@ const P3 = () => {
       channelId: 'pop', // (required) channelId, if the channel doesn't exist, notification will not trigger.
 
       title: 'conductor', // (optional)
-      message: 'Nueva orden!!!! ', // (required)
+      message: 'Nueva orden', // (required)
       soundName: 'default',
       playSound: true,
     });
@@ -299,13 +310,9 @@ const P3 = () => {
 
   const checkOneline = () => {
     if (online === true) {
-      console.log(online);
-
       oneline();
     }
     if (online === false) {
-      console.log(online);
-
       ofline();
     }
   };
@@ -313,63 +320,142 @@ const P3 = () => {
   useEffect(() => {
     checkOneline();
   }, [toggleSwitch]);
+
+  const checkOrder = async () => {
+    // fetch Orders
+    try {
+      const userInfo = await Auth.currentAuthenticatedUser();
+      const User = userInfo.username;
+
+      const response = await API.graphql(
+        graphqlOperation(listOrders, {filter: {type: {eq: User}}}),
+      );
+      setCheckState(response.data.listOrders.items);
+      if (response.data.listOrders.items[0] === undefined) {
+        console.log('no orders on background');
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  if (checkState !== []) {
+    // check if order is ongoing state
+    checkState.map((data) => {
+      if (data.status === 'ongoing') {
+        console.log(data.nota);
+
+        const origins = {
+          latitude: data.originLatitude,
+          longitude: data.originLongitude,
+        };
+        const destination = {
+          latitude: data.destLatitude,
+          longitude: data.destLongitude,
+        };
+
+        navigation.navigate('P6', {
+          cost: data.cost,
+          type: data.type,
+          id: data.id,
+          carId: data.carId,
+          variate: '',
+          distance: 'distance',
+          destination: destination,
+          origins: origins,
+          nota: data.nota,
+          place: data.place,
+        });
+        setCheckState([]);
+      } else {
+        console.log('no orders on background');
+      }
+      // get information about lost order and car to re take order
+    });
+  }
+
+  const MoneyState = async () => {
+    // GET USER
+    const userInfo = await Auth.currentAuthenticatedUser();
+
+    const orderData = await API.graphql(
+      graphqlOperation(listCars, {filter: {id: {eq: userInfo.attributes.sub}}}),
+    );
+
+    setSaldo(orderData.data.listCars.items[0].heading);
+  };
+
+  useEffect(() => {
+    checkOrder();
+    MoneyState();
+  }, []);
+
   return (
     <SafeAreaView>
-      <View style={{width: '100%', height: '100%', backgroundColor: '#181818'}}>
-        <Pressable style={[styles.top, {top: 0}]}>
-          <Switch
-            trackColor={{false: '#767577', true: '#81b0ff'}}
-            thumbColor={online ? '#f4f3f4' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={online}
-          />
-          <View style={styles.oneline}>
-            {online ? (
-              <Text style={styles.onelinetxt}>oneline</Text>
-            ) : (
-              <Text style={styles.oflinetxt}>offline</Text>
-            )}
-          </View>
-          <View style={styles.pres}>
-            <Text style={styles.wallet}>
-              {12912}
-              {'  '} <Icon name="wallet-outline" size={20} color="#ffffff" />
-            </Text>
-          </View>
-        </Pressable>
-        <View>
-          <MapView
-            style={{height: 0, width: 0}}
-            provider={PROVIDER_GOOGLE}
-            showsMyLocationButton={false}
-            onUserLocationChange={loc}
-            showsUserLocation={true}
-            showsCompass={false}
-            initialRegion={{
-              latitude: 0,
-              longitude: 0,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}></MapView>
-        </View>
-
-        {online === true && (
-          <View style={{marginTop: 71, marginBottom: 0}}>
-            <FlatList
-              data={newOrders}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id}
+      {saldo > 30 && (
+        <View
+          style={{width: '100%', height: '100%', backgroundColor: '#181818'}}>
+          <Pressable style={[styles.top, {top: 0}]}>
+            <Switch
+              trackColor={{false: '#767577', true: '#81b0ff'}}
+              thumbColor={online ? '#f4f3f4' : '#f4f3f4'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitch}
+              value={online}
             />
+            <View style={styles.oneline}>
+              {online ? (
+                <Text style={styles.onelinetxt}>oneline</Text>
+              ) : (
+                <Text style={styles.oflinetxt}>offline</Text>
+              )}
+            </View>
+            <View style={styles.pres}>
+              <Text style={styles.wallet}>
+                {saldo}
+                {'  '} <Icon name="wallet-outline" size={20} color="#ffffff" />
+              </Text>
+            </View>
+          </Pressable>
+          <View>
+            <MapView
+              style={{height: 0, width: 0}}
+              provider={PROVIDER_GOOGLE}
+              showsMyLocationButton={false}
+              onUserLocationChange={loc}
+              showsUserLocation={true}
+              showsCompass={false}
+              initialRegion={{
+                latitude: 0,
+                longitude: 0,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}></MapView>
           </View>
-        )}
 
-        <TouchableOpacity
-          style={styles.history}
-          onPressIn={() => navigation.navigate('P5')}>
-          <Icon name="bar-chart-outline" size={20} color="#000" />
-        </TouchableOpacity>
-      </View>
+          {online === true && (
+            <View style={{marginTop: 71, marginBottom: 0}}>
+              <FlatList
+                data={newOrders}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id}
+              />
+            </View>
+          )}
+
+          <TouchableOpacity
+            style={styles.history}
+            onPressIn={() => navigation.navigate('P5')}>
+            <Icon name="bar-chart-outline" size={20} color="#000" />
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {saldo < 30 && saldo !== 0 && (
+        <View style={styles.error}>
+          <Text style={styles.erroTxt}>Te quedaste sin saldo </Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

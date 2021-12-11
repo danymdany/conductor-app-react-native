@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {View, Image, ImageBackground, BackHandler, Alert} from 'react-native';
 import LottieView from 'lottie-react-native';
 import {useNavigation} from '@react-navigation/native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+
 import styles from './styles';
 
 const P1 = () => {
@@ -31,8 +31,6 @@ const P1 = () => {
 
     return () => backHandler.remove();
   }, []);
-
-  console.log('s');
 
   return (
     <ImageBackground

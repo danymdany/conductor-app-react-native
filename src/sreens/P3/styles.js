@@ -1,6 +1,16 @@
 import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
+  erroTxt: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  error: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   item: {
     backgroundColor: '#404040',
     padding: 47,
