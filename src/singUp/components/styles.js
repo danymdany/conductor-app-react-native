@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   info2: {
-    color: '#000',
+    color: '#fff',
     fontSize: 16,
   },
 
@@ -45,26 +45,58 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 20,
   },
+  inputIcon: {
+    marginBottom: -111,
+    marginRight: -20,
+  },
 
+  inputIcon2: {
+    marginBottom: -25,
+    marginRight: -20,
+  },
+  inputContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    flexDirection: 'row',
+  },
   input1: {
     width: '90%',
     height: 45,
-    borderColor: '#565656',
-    borderWidth: 0.2,
+    borderBottomColor: '#454545',
+    borderBottomWidth: 0.3,
     marginTop: 110,
-    borderRadius: 10,
-    paddingLeft: 10,
+
+    paddingLeft: 30,
   },
+
   input2: {
     width: '90%',
     height: 45,
-    borderColor: '#565656',
-    borderWidth: 0.2,
+    borderBottomColor: '#454545',
+    borderBottomWidth: 0.3,
     marginTop: 20,
-    borderRadius: 10,
-    paddingLeft: 10,
+
+    paddingLeft: 30,
   },
 
+  code: {
+    backgroundColor: '#fff',
+    borderWidth: 0.4,
+    borderColor: '#004DFF',
+    borderRadius: 10,
+    marginLeft: -115,
+    marginBottom: -15,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+  },
+
+  codetxt: {
+    color: 'rgb(7, 90, 255)',
+  },
   bottomLinkLeft: {
     marginTop: 10,
     bottom: 50,
@@ -91,16 +123,29 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
   },
   press2: {
-    width: '90%',
-    height: 50,
+    backgroundColor: '#286EFA',
     marginTop: 30,
+    width: 340,
+    height: 47,
     borderRadius: 8,
+
     justifyContent: 'center',
     alignItems: 'center',
+
+    borderColor: '#000000',
+    borderWidth: 0.2,
+
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOpacity: 0.8,
+    elevation: 6,
+    shadowRadius: 15,
+    shadowOffset: {width: 1, height: 13},
   },
 
   mistake: {
     color: 'red',
+    fontWeight: 'bold',
+    marginTop: 10,
   },
 });
 

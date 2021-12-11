@@ -9,7 +9,7 @@ import {
 import {useNavigation, useRoute} from '@react-navigation/native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {createCarInfo, updateOrder, updateCar} from '../../graphql/mutation';
 import {API, graphqlOperation, Auth} from 'aws-amplify';
 import {getOrder} from '../../graphql/query';
@@ -180,6 +180,21 @@ const P4 = () => {
 
   const distance = allinfo.distance.toFixed(1);
 
+  const onAcept = () => {
+    navigation.navigate('P6', {
+      cost: route.params.cost,
+      type: route.params.name,
+      id: route.params.id,
+      carId: route.params.carid,
+      variate: variation,
+      distance: distance,
+      destination: destination,
+      origins: origins,
+      nota: route.params.nota,
+      place: route.params.place,
+    });
+  };
+
   return (
     <SafeAreaView>
       <MapView
@@ -220,43 +235,27 @@ const P4 = () => {
           strokeColor="#ffffff"
         />
       </MapView>
-
-      <Pressable style={styles.View}>
-        <View style={styles.item2}>
-          <Text style={styles.title}>{route.params.place}</Text>
-        </View>
-
-        <View style={styles.item3}>
-          <Text style={styles.title}>{route.params.name}</Text>
-        </View>
-        <View style={styles.item4}></View>
-        <View style={styles.item22}>
-          <Text style={styles.title}>{route.params.nota}</Text>
-        </View>
-      </Pressable>
-
       {userstate === 'NEW' && (
         <TouchableOpacity
           onPress={order}
           onPressIn={End}
-          onPressOut={() =>
-            navigation.navigate('P6', {
-              cost: route.params.cost,
-              type: route.params.name,
-              id: route.params.id,
-              carId: route.params.carid,
-              variate: variation,
-              distance: distance,
-              destination: destination,
-              origins: origins,
-            })
-          }
+          onPressOut={onAcept}
           style={styles.acept}>
-          <Text>
-            <Icon name="check" size={20} color="#000000" />
+          <Text style={styles.textbt}>
+            <Icon name="md-arrow-forward-sharp" size={30} color="#286EFA" />
           </Text>
         </TouchableOpacity>
       )}
+      <Pressable style={styles.View}>
+        <Text style={styles.textuser}>
+          {' '}
+          <Icon name="person-outline" size={21} color="#286EFA" />
+          {'   '}
+          {route.params.name}
+        </Text>
+        <Text style={styles.text21}> {route.params.place}</Text>
+        <Text style={styles.text21}> {route.params.nota}</Text>
+      </Pressable>
 
       {userstate === 'ongoing' && (
         <TouchableOpacity
@@ -265,15 +264,13 @@ const P4 = () => {
           <Text style={{color: '#ffffff'}}>esta orden ya fue tomada</Text>
         </TouchableOpacity>
       )}
-      <Pressable style={styles.cost}>
-        <Text style={{color: '#fff', fontSize: 18, fontWeight: 'bold'}}>
-          {route.params.cost} NIO{' '}
-        </Text>
-      </Pressable>
+      <View style={styles.cost}>
+        <Text style={styles.costxt}>{route.params.cost} NIO </Text>
+      </View>
 
       <Pressable style={styles.back} onPress={() => navigation.navigate('P3')}>
         <Text>
-          <Icon name="angle-left" size={30} color="#000000" />
+          <Icon name="ios-chevron-back-outline" size={30} color="#000" />
         </Text>
       </Pressable>
     </SafeAreaView>

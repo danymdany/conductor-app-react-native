@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  Pressable,
-  SafeAreaView,
-  View,
-  ImageBackground,
-} from 'react-native';
+import {Text, Pressable, View, ImageBackground} from 'react-native';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/Feather';
 import {useNavigation, useRoute} from '@react-navigation/native';

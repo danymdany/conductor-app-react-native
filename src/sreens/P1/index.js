@@ -32,6 +32,8 @@ const P1 = () => {
     return () => backHandler.remove();
   }, []);
 
+  console.log('s');
+
   return (
     <ImageBackground
       source={require('../../animations/bg.jpg')}

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import {useNavigation, useRoute} from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {API, graphqlOperation, Auth} from 'aws-amplify';
 import {updateOrder, updateCar} from '../../graphql/mutation';
 import {getOrder} from '../../graphql/query';
@@ -175,62 +175,72 @@ const P6 = () => {
             strokeColor="#fff"
           />
         </MapView>
-
-        <View style={styles.orderInfo}>
-          <Text style={styles.distance}>{route.params.distance} KM</Text>
-          <Text style={styles.cost}>{route.params.cost} NIO</Text>
-
-          <Text></Text>
-        </View>
-        <TouchableOpacity
-          style={styles.endOrder}
-          onPress={() => Linking.openURL(url)}>
-          <Icon name="navigation" size={20} color="#000000" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.useMap}
-          onPress={() => navigator.navigate('P3')}
-          onPressIn={End}>
-          <Icon name="slash" size={20} color="#000000" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.declineOrder} onPress={close}>
-          <Icon name="meh" size={20} color="#000000" />
-        </TouchableOpacity>
       </View>
 
+      <View style={styles.info1}>
+        <Text style={styles.infotxt}>{route.params.distance} KM </Text>
+      </View>
+
+      <View style={styles.info2}>
+        <Text style={styles.infotxt}>{route.params.cost} NIO</Text>
+      </View>
+      <TouchableOpacity
+        style={styles.endOrder}
+        onPress={() => Linking.openURL(url)}>
+        <Text>
+          <Icon name="ios-map-outline" size={21} color="#286EFA" />
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.useMap}
+        onPress={() => navigator.navigate('P3')}
+        onPressIn={End}>
+        <Text>
+          <Icon name="md-checkmark-done" size={21} color="#286EFA" />
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.declineOrder} onPress={close}>
+        <Text>
+          <Icon name="ios-trash-outline" size={21} color="#286EFA" />
+        </Text>
+      </TouchableOpacity>
+      <View style={styles.View}>
+        <Text style={styles.textuser}>
+          {' '}
+          <Icon name="person-outline" size={21} color="#286EFA" />
+          {'   '}
+          {route.params.type}
+        </Text>
+        <Text style={styles.text}>{route.params.place}</Text>
+        <Text style={styles.text}>{route.params.nota} </Text>
+      </View>
       {userstate === 'cancelled' && (
         <View style={styles.status}>
           <Text style={{color: 'red'}}>
-            <Icon name="info" size={20} color="#000000" />
             {'  '}
             la orden fue cancelada por el cliente{' '}
           </Text>
+
+          <TouchableOpacity
+            style={styles.back}
+            onPress={() => navigator.navigate('P3')}>
+            <Text>
+              <Icon name="md-log-out-outline" size={21} color="#000" />
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
-      {userstate === 'cancelled' && (
-        <TouchableOpacity
-          style={styles.back}
-          onPress={() => navigator.navigate('P3')}>
-          <Icon name="log-out" size={20} color="#000000" />
-        </TouchableOpacity>
-      )}
-
       {userstate === 'rejected' && (
         <View style={styles.status}>
-          <Text style={{color: 'red'}}>
-            <Icon name="info" size={20} color="#000000" />
-            {'  '}
-            acabas de rechazar esta orden{' '}
-          </Text>
+          <Text style={{color: 'red'}}>acabas de rechazar esta orden </Text>
+          <TouchableOpacity
+            style={styles.back}
+            onPress={() => navigator.navigate('P3')}>
+            <Text>
+              <Icon name="md-log-out-outline" size={21} color="#000" />
+            </Text>
+          </TouchableOpacity>
         </View>
-      )}
-
-      {userstate === 'rejected' && (
-        <TouchableOpacity
-          style={styles.back}
-          onPress={() => navigator.navigate('P3')}>
-          <Icon name="log-out" size={20} color="#000000" />
-        </TouchableOpacity>
       )}
     </SafeAreaView>
   );

@@ -9,6 +9,47 @@ const styles = StyleSheet.create({
     borderBottomColor: '#C8C8C8',
     borderBottomWidth: 0.5,
   },
+  top: {
+    position: 'absolute',
+    width: '100%',
+    height: 70,
+
+    alignSelf: 'center',
+
+    flexDirection: 'row',
+    alignItems: 'center',
+
+    backgroundColor: '#121212',
+    borderBottomColor: '#898989',
+    borderBottomWidth: 0.2,
+  },
+  pres: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+
+    right: 10,
+  },
+
+  wallet: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+
+  history: {
+    width: 45,
+    height: 45,
+
+    position: 'absolute',
+    borderRadius: 100,
+
+    right: 10,
+    bottom: 100,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   item2: {
     width: 300,
     height: 60,
@@ -63,30 +104,16 @@ const styles = StyleSheet.create({
   },
 
   oneline: {
-    width: 45,
-    height: 45,
-
-    position: 'absolute',
-    borderRadius: 100,
-
-    right: 10,
-    bottom: 100,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginLeft: 10,
   },
-  ofline: {
-    width: 45,
-    height: 45,
 
-    position: 'absolute',
-    borderRadius: 100,
-
-    right: 10,
-    bottom: 100,
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    alignItems: 'center',
+  onelinetxt: {
+    color: 'green',
+    fontSize: 15,
+  },
+  oflinetxt: {
+    color: 'red',
+    fontSize: 15,
   },
 });
 

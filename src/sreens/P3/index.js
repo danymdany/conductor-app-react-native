@@ -6,27 +6,27 @@ import {
   FlatList,
   TouchableOpacity,
   Platform,
-  Alert,
+  Pressable,
+  Switch,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {API, Auth, graphqlOperation} from 'aws-amplify';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import styles from './styles';
-import Tr from '../bottomBr/topBar';
-import {listOrders, getCar, listCars} from '../../graphql/query';
+import {listOrders, getCar} from '../../graphql/query';
 import {onCreateOrder, onUpdateOrder} from '../../graphql/real-time-order';
 import {createCar, updateCar} from '../../graphql/mutation';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import PushNotification from 'react-native-push-notification';
 import BackgroundFetch from 'react-native-background-fetch';
 
-// require imports
-
 const P3 = () => {
   const [lat, setLat] = useState(0);
   const [lon, setLon] = useState(0);
   const [newOrders, setNewOrders] = useState([]);
   const [online, setOneline] = useState(true);
+
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -177,7 +177,7 @@ const P3 = () => {
     }
 
     const cal = distance(lat1, lon1, lat2, lon2);
-    console.log(cal);
+
     if (cal <= 3) {
       return (
         <TouchableOpacity
@@ -293,12 +293,51 @@ const P3 = () => {
       playSound: true,
     });
   };
+  const toggleSwitch = () => {
+    setOneline(!online);
+  };
 
+  const checkOneline = () => {
+    if (online === true) {
+      console.log(online);
+
+      oneline();
+    }
+    if (online === false) {
+      console.log(online);
+
+      ofline();
+    }
+  };
+
+  useEffect(() => {
+    checkOneline();
+  }, [toggleSwitch]);
   return (
     <SafeAreaView>
       <View style={{width: '100%', height: '100%', backgroundColor: '#181818'}}>
-        <Tr />
-
+        <Pressable style={[styles.top, {top: 0}]}>
+          <Switch
+            trackColor={{false: '#767577', true: '#81b0ff'}}
+            thumbColor={online ? '#f4f3f4' : '#f4f3f4'}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={online}
+          />
+          <View style={styles.oneline}>
+            {online ? (
+              <Text style={styles.onelinetxt}>oneline</Text>
+            ) : (
+              <Text style={styles.oflinetxt}>offline</Text>
+            )}
+          </View>
+          <View style={styles.pres}>
+            <Text style={styles.wallet}>
+              {12912}
+              {'  '} <Icon name="wallet-outline" size={20} color="#ffffff" />
+            </Text>
+          </View>
+        </Pressable>
         <View>
           <MapView
             style={{height: 0, width: 0}}
@@ -324,22 +363,12 @@ const P3 = () => {
             />
           </View>
         )}
-        {online === true && (
-          <TouchableOpacity
-            style={styles.oneline}
-            onPressIn={ofline}
-            onPress={() => setOneline(!online)}>
-            {online === true && <Text>ON</Text>}
-          </TouchableOpacity>
-        )}
-        {online === false && (
-          <TouchableOpacity
-            style={styles.ofline}
-            onPressIn={oneline}
-            onPress={() => setOneline(!online)}>
-            <Text style={{color: '#fff'}}>OFF</Text>
-          </TouchableOpacity>
-        )}
+
+        <TouchableOpacity
+          style={styles.history}
+          onPressIn={() => navigation.navigate('P5')}>
+          <Icon name="bar-chart-outline" size={20} color="#000" />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

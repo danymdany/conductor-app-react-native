@@ -9,11 +9,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   text21: {
-    color: '#000000',
-    textAlign: 'center',
-    fontWeight: 'bold',
+    color: '#fff',
+
+    padding: 7,
   },
 
+  textuser: {
+    color: '#fff',
+
+    fontWeight: 'bold',
+    fontSize: 16,
+    padding: 7,
+  },
+  textbt: {
+    color: '#fff',
+
+    fontWeight: 'bold',
+    paddingLeft: 5,
+    paddingRight: 5,
+  },
   View: {
     backgroundColor: '#121212',
 
@@ -21,7 +35,7 @@ const styles = StyleSheet.create({
     bottom: 0,
 
     width: '100%',
-    height: 125,
+    height: 180,
   },
 
   back: {
@@ -81,18 +95,16 @@ const styles = StyleSheet.create({
   },
 
   acept: {
-    width: 55,
-    height: 55,
-    backgroundColor: '#ffffff',
     position: 'absolute',
-
-    bottom: 200,
+    backgroundColor: '#121212',
+    bottom: 190,
     right: 10,
-    borderRadius: 100,
 
+    height: 40,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     flexDirection: 'row',
+    borderRadius: 10,
   },
   timeout: {
     width: '100%',
@@ -132,18 +144,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 
+  costxt: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
   cost: {
-    width: 200,
-    height: 40,
     position: 'absolute',
 
-    top: 10,
-
-    borderRadius: 5,
+    right: 5,
+    top: 20,
 
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'center',
   },
 });
 export default styles;
