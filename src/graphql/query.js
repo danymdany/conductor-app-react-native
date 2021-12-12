@@ -65,6 +65,7 @@ export const listTodos = /* GraphQL */ `
         id
         username
         email
+        phone
         orders {
           nextToken
         }

@@ -13,7 +13,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {API, graphqlOperation, Auth} from 'aws-amplify';
 import {updateOrder, updateCar} from '../../graphql/mutation';
-import {getOrder} from '../../graphql/query';
+import {getOrder, listTodos} from '../../graphql/query';
 import {onUpdateOrder} from '../../graphql/real-time-order';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
@@ -26,6 +26,7 @@ const P6 = () => {
   const [lat, setLat] = useState(0);
   const [lon, setLon] = useState(0);
   const [userstate, setUserState] = useState('');
+  const [userPhone, setUserphone] = useState('');
   const [email, setEmail] = useState('');
   const [allinfo, setAllinfo] = useState({
     distance: 10,
@@ -150,6 +151,7 @@ const P6 = () => {
 
   useEffect(() => {
     onUserLocationChange();
+    CheckUser();
   });
 
   const GOOGLE_MAPS_APIKEY = 'AIzaSyDC5YeK0OuXzBkkpcdYF71wTjtIGVV4NgE';
@@ -161,6 +163,20 @@ const P6 = () => {
     });
   };
   const distance = allinfo.distance.toFixed(1);
+
+  const CheckUser = async () => {
+    try {
+      const orderData = await API.graphql(
+        graphqlOperation(listTodos, {
+          filter: {username: {eq: route.params.type}},
+        }),
+      );
+      setUserphone(orderData.data.listTodos.items[0].phone);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -211,6 +227,14 @@ const P6 = () => {
           <Icon name="md-checkmark-done" size={21} color="#286EFA" />
         </Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.usePhone}
+        onPress={() => Linking.openURL(`tel:${userPhone}`)}>
+        <Text>
+          <Icon name="ios-call-outline" size={21} color="#286EFA" />
+        </Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.declineOrder} onPress={close}>
         <Text>
           <Icon name="ios-trash-outline" size={21} color="#286EFA" />
@@ -223,6 +247,7 @@ const P6 = () => {
           {'   '}
           {route.params.type}
         </Text>
+
         <Text style={styles.text}>{route.params.place}</Text>
         <Text style={styles.text}>{route.params.nota} </Text>
       </View>

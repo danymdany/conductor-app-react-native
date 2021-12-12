@@ -86,6 +86,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
+  usePhone: {
+    width: 45,
+    height: 45,
+    position: 'absolute',
+    backgroundColor: '#fff',
+    bottom: 380,
+    left: 10,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   declineOrder: {
     width: 45,
     height: 45,

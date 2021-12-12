@@ -102,6 +102,10 @@ const P3 = () => {
         longitude: 0,
         heading: 100,
         oneline: true,
+
+        phone: '',
+        model: '',
+        identification: '',
         userId: userInfo.attributes.sub,
       };
       await API.graphql(

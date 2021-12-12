@@ -181,6 +181,9 @@ export const createCar = /* GraphQL */ `
       longitude
       heading
       oneline
+      phone
+      model
+      identification
       orders {
         items {
           id
